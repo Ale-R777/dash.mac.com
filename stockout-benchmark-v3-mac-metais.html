@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Benchmark de Ruptura de Estoque — MAC Metais Vintage 2025/2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080B10;--surface:#0F1319;--surface2:#161C26;--surface3:#1D2535;
+  --border:#1E2535;--border2:#2A3347;--border3:#354057;
+  --text:#DDE3EF;--text2:#7A8499;--text3:#4A5268;--text4:#2E3650;
+  --accent:#2563EB;--accent-l:#3B82F6;
+  --green:#22C55E;--green-bg:rgba(34,197,94,0.08);--green-border:rgba(34,197,94,0.2);
+  --amber:#F59E0B;--amber-bg:rgba(245,158,11,0.08);--amber-border:rgba(245,158,11,0.2);
+  --red:#EF4444;--red-bg:rgba(239,68,68,0.08);--red-border:rgba(239,68,68,0.2);
+  --purple:#A855F7;--purple-bg:rgba(168,85,247,0.08);--purple-border:rgba(168,85,247,0.2);
+  --teal:#14B8A6;--teal-bg:rgba(20,184,166,0.08);--teal-border:rgba(20,184,166,0.2);
+  --gold:#D97706;--gold-bg:rgba(217,119,6,0.08);
+  --r:8px;--rl:12px;--rxl:16px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+
+/* NAV */
+.topbar{background:rgba(8,11,16,0.96);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:200;backdrop-filter:blur(16px)}
+.topbar-inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#2563EB,#7C3AED);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{width:16px;height:16px;fill:white}
+.logo-name{font-size:13px;font-weight:600;color:var(--text);letter-spacing:.01em}
+.logo-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.nav-pills{display:flex;gap:4px;overflow-x:auto}
+.nav-pill{font-size:11px;font-weight:500;padding:5px 14px;border-radius:20px;border:none;background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .2s;text-decoration:none;display:block}
+.nav-pill:hover{color:var(--text);background:var(--surface2)}
+.nav-pill.active{background:var(--accent);color:white}
+.live{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);flex-shrink:0}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* PAGE */
+.page{max-width:1320px;margin:0 auto;padding:0 24px 80px}
+section{padding-top:40px}
+
+/* HERO */
+.hero{padding:44px 0 36px;border-bottom:1px solid var(--border);margin-bottom:36px}
+.hero-eyebrow{font-size:11px;font-weight:500;color:var(--accent-l);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.hero-eyebrow::after{content:'';flex:0 0 40px;height:1px;background:var(--accent-l);opacity:.5}
+.hero h1{font-size:clamp(22px,3.5vw,36px);font-weight:300;line-height:1.15;color:var(--text);margin-bottom:8px}
+.hero h1 strong{font-weight:700;background:linear-gradient(90deg,#3B82F6,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:13px;color:var(--text2);max-width:740px;line-height:1.75;margin-bottom:22px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:11px;font-weight:500;padding:4px 13px;border-radius:20px;border:1px solid;display:flex;align-items:center;gap:5px}
+.chip::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.chip-green{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.chip-amber{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)}
+.chip-red{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.chip-purple{background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple)}
+
+/* SECTION HEADER */
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.sec-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sec-title{font-size:15px;font-weight:600;color:var(--text)}
+.sec-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.sec-line{flex:1;height:1px;background:var(--border)}
+
+/* KPI STRIP */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:32px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s}
+.kpi:hover{border-color:var(--border2)}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
+.kpi.accent::after{background:linear-gradient(90deg,var(--accent),transparent)}
+.kpi.green::after{background:linear-gradient(90deg,var(--green),transparent)}
+.kpi.red::after{background:linear-gradient(90deg,var(--red),transparent)}
+.kpi.amber::after{background:linear-gradient(90deg,var(--amber),transparent)}
+.kpi.purple::after{background:linear-gradient(90deg,var(--purple),transparent)}
+.kpi-lbl{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.kpi-val{font-size:26px;font-weight:300;color:var(--text);letter-spacing:-.02em;line-height:1}
+.kpi-val sup{font-size:13px;font-weight:400;color:var(--text2);margin-left:1px}
+.kpi-note{font-size:11px;color:var(--text3);margin-top:5px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:20px 22px}
+.card-sm{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px}
+.card-title{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.card-badge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:4px;flex-shrink:0}
+
+/* COUNTRY BUTTONS */
+.ctrl-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px;align-items:center}
+.ctrl-label{font-size:11px;color:var(--text3);margin-right:2px}
+.cbtn{font-size:11px;font-weight:500;padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.cbtn:hover{border-color:var(--text2);color:var(--text)}
+.cbtn.active{background:var(--accent);border-color:var(--accent);color:white}
+
+/* TWO COL */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+
+/* SECTOR TABLE */
+.stbl{width:100%;border-collapse:collapse}
+.stbl th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:500;padding:0 8px 10px 0;border-bottom:1px solid var(--border);text-align:left}
+.stbl th:not(:first-child){text-align:right}
+.stbl td{padding:9px 8px 9px 0;border-bottom:1px solid var(--border);vertical-align:middle}
+.stbl td:not(:first-child){text-align:right}
+.stbl tr:last-child td{border-bottom:none}
+.stbl tr{cursor:pointer;transition:background .15s}
+.stbl tr:hover td{background:rgba(255,255,255,.02)}
+.stbl tr.sel td{background:rgba(37,99,235,.07)}
+.sn{font-size:12px;font-weight:500;color:var(--text)}
+.sv{font-size:12px;font-weight:500;font-family:'DM Mono',monospace}
+.sv.g{color:var(--green)}.sv.a{color:var(--amber)}.sv.r{color:var(--red)}
+.stag{display:inline-block;font-size:9px;font-weight:500;padding:1px 6px;border-radius:3px}
+.tg{background:var(--green-bg);color:var(--green)}
+.ta{background:var(--amber-bg);color:var(--amber)}
+.tr{background:var(--red-bg);color:var(--red)}
+.tp{background:var(--purple-bg);color:var(--purple)}
+.sbar-w{width:72px;height:4px;background:var(--surface3);border-radius:2px;display:inline-block;vertical-align:middle}
+.sbar{height:100%;border-radius:2px;transition:width .4s ease}
+
+/* DETAIL */
+.cmp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.cmp{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);padding:12px 14px}
+.cmp-c{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.cmp-v{font-size:21px;font-weight:300;letter-spacing:-.02em;margin-bottom:3px}
+.cmp-s{font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;display:inline-block}
+
+.risk-bar{width:100%;height:10px;border-radius:5px;overflow:hidden;display:flex;position:relative;margin-bottom:5px}
+.risk-seg{height:100%}
+.risk-needle{position:absolute;top:-3px;width:2px;height:16px;background:white;border-radius:1px;box-shadow:0 0 8px rgba(255,255,255,.6);transition:left .5s ease}
+.risk-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:14px}
+
+.insight{background:linear-gradient(135deg,rgba(37,99,235,.07),rgba(37,99,235,.02));border:1px solid rgba(37,99,235,.18);border-radius:var(--r);padding:13px 16px;font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:14px}
+.insight strong{color:var(--text);font-weight:500}
+
+/* CHART */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:22px;margin-bottom:16px}
+.ch-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:11px;color:var(--text2)}
+.ch-legend span{display:flex;align-items:center;gap:5px}
+.ch-legend i{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* RISK INDEX */
+.risk-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;transition:border-color .2s}
+.rc:hover{border-color:var(--border3)}
+.rc-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:10px;line-height:1.3}
+.rc-score-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:8px}
+.rc-score{font-size:28px;font-weight:300;letter-spacing:-.03em;line-height:1}
+.rc-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:3px}
+.rc-bar-track{width:100%;height:5px;background:var(--surface3);border-radius:3px;margin-bottom:8px}
+.rc-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.rc-subs{display:flex;gap:6px;flex-wrap:wrap}
+.rc-sub{font-size:10px;color:var(--text3);background:var(--surface2);padding:2px 6px;border-radius:3px;white-space:nowrap}
+
+/* ADS IMPACT */
+.ads-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+.ads-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px}
+.ads-platform{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ads-logo{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ads-pname{font-size:13px;font-weight:500;color:var(--text)}
+.ads-metric{margin-bottom:8px}
+.ads-metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.ads-metric-val{font-size:16px;font-weight:500;color:var(--red)}
+.ads-metric-val.amber{color:var(--amber)}
+.ads-metric-val.green{color:var(--green)}
+.ads-note{font-size:11px;color:var(--text2);line-height:1.6;margin-top:8px;border-top:1px solid var(--border);padding-top:8px}
+
+/* MARKETPLACE TABLE */
+.mkt-table{width:100%;border-collapse:collapse}
+.mkt-table th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:500;padding:0 10px 10px 0;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.mkt-table td{padding:10px 10px 10px 0;border-bottom:1px solid var(--border);font-size:12px;vertical-align:top}
+.mkt-table tr:last-child td{border-bottom:none}
+.mkt-name{display:flex;align-items:center;gap:8px;font-weight:500;color:var(--text);white-space:nowrap}
+.mkt-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.severity{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:4px}
+.recovery{font-size:11px;color:var(--text2)}
+.mkt-impact{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* RECOVERY TIMELINE */
+.timeline{position:relative;padding-left:28px;margin-bottom:8px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:var(--border2)}
+.tl-item{position:relative;margin-bottom:16px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{width:16px;height:16px;border-radius:50%;border:2px solid;position:absolute;left:-24px;top:2px;display:flex;align-items:center;justify-content:center}
+.tl-dot-inner{width:6px;height:6px;border-radius:50%}
+.tl-day{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.tl-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px}
+.tl-desc{font-size:11px;color:var(--text2);line-height:1.6}
+
+/* CALCULATOR */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:0}
+@media(max-width:700px){.calc-grid{grid-template-columns:1fr}}
+.calc-field{margin-bottom:16px}
+.calc-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.calc-label span{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--text);letter-spacing:0}
+input[type=range]{width:100%;height:4px;-webkit-appearance:none;background:var(--surface3);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg);box-shadow:0 0 0 2px var(--accent);transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.calc-result{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rl);padding:20px}
+.calc-r-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.calc-r-val{font-size:32px;font-weight:300;color:var(--red);letter-spacing:-.02em;margin-bottom:4px;font-family:'DM Sans',sans-serif}
+.calc-r-val.amber{color:var(--amber)}
+.calc-r-val.green{color:var(--green)}
+.calc-r-sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+.calc-r-breakdown{display:flex;flex-direction:column;gap:8px}
+.calc-r-item{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:8px 10px;background:var(--surface3);border-radius:6px}
+.calc-r-item-label{color:var(--text2)}
+.calc-r-item-val{font-family:'DM Mono',monospace;font-weight:500;color:var(--text)}
+
+/* MAC SECTION */
+.mac-hero{background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(168,85,247,.08));border:1px solid rgba(37,99,235,.25);border-radius:var(--rxl);padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
+.mac-hero::before{content:'MAC METAIS VINTAGE';position:absolute;right:-10px;bottom:-14px;font-size:80px;font-weight:700;color:rgba(255,255,255,.02);line-height:1;pointer-events:none;letter-spacing:-.04em}
+.mac-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:500;color:var(--accent-l);margin-bottom:14px}
+.mac-title{font-size:20px;font-weight:300;color:var(--text);margin-bottom:6px}
+.mac-title strong{font-weight:700}
+.mac-desc{font-size:12px;color:var(--text2);line-height:1.75;max-width:680px}
+
+.mac-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.mac-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px}
+.mac-kpi-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.mac-kpi-val{font-size:22px;font-weight:300;color:var(--text);margin-bottom:2px}
+.mac-kpi-sub{font-size:11px;color:var(--text2)}
+
+.rec-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px}
+.rec-card-icon{font-size:18px;margin-bottom:10px}
+.rec-card-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.rec-card-body{font-size:11px;color:var(--text2);line-height:1.65}
+.rec-card-priority{font-size:10px;font-weight:500;padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px}
+.pri-high{background:var(--red-bg);color:var(--red)}
+.pri-med{background:var(--amber-bg);color:var(--amber)}
+.pri-low{background:var(--green-bg);color:var(--green)}
+
+/* WORLD TABLE */
+.wtbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:20px 22px;overflow-x:auto}
+.wtbl{width:100%;border-collapse:collapse;min-width:440px}
+.wtbl th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:0 10px 10px 0;border-bottom:1px solid var(--border);text-align:left}
+.wtbl td{padding:8px 10px 8px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text)}
+.wtbl tr:last-child td{border-bottom:none}
+.flag-cell{display:flex;align-items:center;gap:8px}
+.mbar{display:flex;align-items:center;gap:6px}
+.mbar-t{width:56px;height:4px;background:var(--surface3);border-radius:2px;flex-shrink:0}
+.mbar-f{height:100%;border-radius:2px}
+
+/* METHOD */
+.meth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:16px}
+.meth-item{border-left:2px solid var(--border2);padding-left:14px}
+.meth-item strong{font-size:12px;font-weight:500;color:var(--text);display:block;margin-bottom:4px}
+.meth-item p{font-size:11px;color:var(--text2);line-height:1.6}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:28px 0;margin-top:12px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;font-size:11px;color:var(--text3)}
+.footer-brand{font-weight:600;color:var(--text2);font-size:12px}
+.footer-author{color:var(--accent-l);font-weight:500}
+
+/* SCROLL */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+@media(max-width:640px){.page{padding:0 14px 60px}.topbar{padding:0 14px}.nav-pills{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div>
+      <div><div class="logo-name">StockOut Index</div><div class="logo-sub">MAC Metais Vintage · 2025/2026</div></div>
+    </div>
+    <nav class="nav-pills">
+      <a class="nav-pill active" href="#benchmark">Benchmark</a>
+      <a class="nav-pill" href="#risco">Índice de Risco</a>
+      <a class="nav-pill" href="#ads">Google & Meta Ads</a>
+      <a class="nav-pill" href="#marketplaces">Marketplaces</a>
+      <a class="nav-pill" href="#recuperacao">Recuperação</a>
+      <a class="nav-pill" href="#calculadora">Calculadora</a>
+      <a class="nav-pill" href="#mac">MAC Metais Vintage</a>
+    </nav>
+    <div class="live"><div class="dot"></div>Base 2025/2026</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero" id="benchmark">
+    <div class="hero-eyebrow">Inteligência Comercial <span style="color:var(--text3);font-weight:400;font-size:10px;letter-spacing:.03em">· PARA MAC METAIS VINTAGE — SAÚDE DO ESTOQUE COM MÉDIA CRÍTICA ACEITÁVEL</span></div>
+    <h1>Ruptura de Estoque no <strong>E-commerce</strong><br/>Benchmark Setorial · Impacto em Ads & Marketplaces</h1>
+    <p class="hero-desc">Análise completa de Fora de Estoque por setor e mercado, com correlação de impacto em campanhas pagas (Google & Meta Ads), penalizações em marketplaces (Amazon, Mercado Livre, Leroy Merlin, TikTok Shop, AliExpress, Nuvemshop), calculadora de perda financeira e seção dedicada ao setor de Louças & Metais Sanitários. Base: Neogrid, Lett, IHL Group, IBEVAR, NRF, Forrester Research, CBIC · 2025/2026.</p>
+    <div class="hero-chips">
+      <span class="chip chip-green">Saudável: 0 – 5%</span>
+      <span class="chip chip-amber">Atenção: 5 – 15%</span>
+      <span class="chip chip-red">Crítico: &gt; 15%</span>
+      <span class="chip chip-purple">Índice de Risco Composto incluído</span>
+    </div>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi accent"><div class="kpi-lbl">Média Brasil</div><div class="kpi-val" id="kpi-br">—<sup>%</sup></div><div class="kpi-note">todos os setores</div></div>
+    <div class="kpi accent"><div class="kpi-lbl">Média EUA</div><div class="kpi-val" id="kpi-us">—<sup>%</sup></div><div class="kpi-note">todos os setores</div></div>
+    <div class="kpi accent"><div class="kpi-lbl">Média Global</div><div class="kpi-val" id="kpi-gl">—<sup>%</sup></div><div class="kpi-note">todos os setores</div></div>
+    <div class="kpi red"><div class="kpi-lbl">Críticos BR</div><div class="kpi-val" id="kpi-crit">—<sup>/12</sup></div><div class="kpi-note">acima de 15%</div></div>
+    <div class="kpi green"><div class="kpi-lbl">Melhor setor BR</div><div class="kpi-val" id="kpi-best">—<sup>%</sup></div><div class="kpi-note" id="kpi-best-n">—</div></div>
+    <div class="kpi amber"><div class="kpi-lbl">Gap BR – EUA</div><div class="kpi-val" id="kpi-gap">—<sup>pp</sup></div><div class="kpi-note">desvantagem logística</div></div>
+    <div class="kpi purple"><div class="kpi-lbl">Louças & Metais BR</div><div class="kpi-val">22,7<sup>%</sup></div><div class="kpi-note">zona crítica</div></div>
+  </div>
+
+  <!-- SECTOR ANALYSIS -->
+  <div class="ctrl-row">
+    <span class="ctrl-label">Ordenar por país:</span>
+    <button class="cbtn active" data-c="br">🇧🇷 Brasil</button>
+    <button class="cbtn" data-c="us">🇺🇸 EUA</button>
+    <button class="cbtn" data-c="eu">🇪🇺 Europa</button>
+    <button class="cbtn" data-c="cn">🇨🇳 China</button>
+    <button class="cbtn" data-c="in">🇮🇳 Índia</button>
+    <button class="cbtn" data-c="gl">🌐 Global</button>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Ranking FDE — <span id="ctr-label">Brasil</span></div>
+        <div class="card-badge" style="background:var(--surface2);color:var(--text2)">↓ maior → menor</div>
+      </div>
+      <table class="stbl" id="stbl"><thead><tr><th>Setor</th><th>%</th><th>Barra</th><th>Status</th></tr></thead><tbody id="stbody"></tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Detalhe — setor selecionado</div></div>
+      <div id="detail-panel"><div style="color:var(--text3);font-size:12px;padding:40px 0;text-align:center">Selecione um setor ←</div></div>
+    </div>
+  </div>
+
+  <!-- COMPARISON CHART -->
+  <div class="chart-card">
+    <div class="card-head">
+      <div class="card-title">Fora de Estoque % por setor e mercado</div>
+      <div style="display:flex;gap:6px">
+        <button class="cbtn active" data-m="br_gl" style="padding:4px 10px;font-size:10px">BR vs Global</button>
+        <button class="cbtn" data-m="all" style="padding:4px 10px;font-size:10px">Todos os países</button>
+      </div>
+    </div>
+    <div style="position:relative;height:300px"><canvas id="mainChart"></canvas></div>
+    <div class="ch-legend" id="main-legend"></div>
+  </div>
+
+  <!-- WORLD TABLES -->
+  <div class="g2">
+    <div class="wtbl-wrap">
+      <div class="card-head" style="margin-bottom:14px"><div class="card-title">Louças & Metais Sanitários — por país</div></div>
+      <table class="wtbl" id="wt-loucas"></table>
+    </div>
+    <div class="wtbl-wrap">
+      <div class="card-head" style="margin-bottom:14px"><div class="card-title">Construção Civil & Home — por país</div></div>
+      <table class="wtbl" id="wt-const"></table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ÍNDICE DE RISCO COMPOSTO
+  ════════════════════════════════════════════════════ -->
+  <section id="risco">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple-bg);border:1px solid var(--purple-border)">📊</div>
+      <div><div class="sec-title">Índice de Risco Composto</div><div class="sec-sub">FDE% + impacto em ads + penalização em marketplaces · escala 0–100</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="insight" style="margin-bottom:16px">
+      <strong>Como funciona:</strong> O Índice de Risco Composto (IRC) combina três dimensões: <strong>peso do FDE no Brasil (50%)</strong> — quanto maior a ruptura, maior o risco; <strong>impacto em campanhas pagas (25%)</strong> — setores com maior CPM e ROAS afetado pontuam mais alto; e <strong>penalização em marketplaces (25%)</strong> — setores mais dependentes de posicionamento algorítmico em ML e Amazon têm maior exposição. Score de 0 a 100: abaixo de 30 = saudável, 30–60 = atenção, acima de 60 = crítico.
+    </div>
+    <div class="risk-cards" id="risk-cards"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       IMPACTO EM ADS
+  ════════════════════════════════════════════════════ -->
+  <section id="ads">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--amber-bg);border:1px solid var(--amber-border)">📢</div>
+      <div><div class="sec-title">Impacto em Google & Meta Ads</div><div class="sec-sub">Correlação entre ruptura de estoque e performance de campanhas pagas</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="insight" style="margin-bottom:16px">
+      <strong>A ruptura invisível mais cara:</strong> quando um produto fica sem estoque, o custo por clique continua sendo debitado enquanto a taxa de conversão desaba. O ROAS pode cair <strong>60–80%</strong> em produtos em FDE. Mais grave: os algoritmos do Google e Meta interpretam alta rejeição pós-clique como sinal de baixa qualidade, <strong>elevando permanentemente o CPM e CPC</strong> mesmo após o estoque ser reabastecido. Recuperar o Quality Score leva de 2 a 6 semanas.
+    </div>
+    <div class="ads-grid" id="ads-grid"></div>
+    <div class="chart-card" style="margin-top:0">
+      <div class="card-head"><div class="card-title">Queda de ROAS por % de ruptura de estoque — simulação por canal</div></div>
+      <div style="position:relative;height:260px"><canvas id="roasChart"></canvas></div>
+      <div class="ch-legend">
+        <span><i style="background:#3B82F6"></i>Google Shopping</span>
+        <span><i style="background:#EC4899"></i>Meta Catalog Ads</span>
+        <span><i style="background:#F59E0B"></i>Google Search (marca)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       MARKETPLACES
+  ════════════════════════════════════════════════════ -->
+  <section id="marketplaces">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--teal-bg);border:1px solid var(--teal-border)">🛒</div>
+      <div><div class="sec-title">Impacto por Marketplace</div><div class="sec-sub">Penalizações algoritímicas, perda de posicionamento e Buy Box por canal</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="card" style="margin-bottom:16px;overflow-x:auto">
+      <table class="mkt-table" id="mkt-table"></table>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Gravidade da penalização por canal</div></div>
+        <div style="position:relative;height:260px"><canvas id="mktChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Dependência de ranking orgânico por setor</div></div>
+        <div style="position:relative;height:260px"><canvas id="orgChart"></canvas></div>
+        <div class="ch-legend" style="margin-top:10px">
+          <span><i style="background:#22C55E"></i>Baixa (produto encontrado por busca direta)</span>
+          <span><i style="background:#EF4444"></i>Alta (depende de algoritmo e Buy Box)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       TIMELINE DE RECUPERAÇÃO
+  ════════════════════════════════════════════════════ -->
+  <section id="recuperacao">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green-bg);border:1px solid var(--green-border)">⏱</div>
+      <div><div class="sec-title">Tempo de Recuperação de Ranking Pós-Ruptura</div><div class="sec-sub">Quanto tempo leva para recuperar posicionamento após reabastecimento</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Google Shopping — linha do tempo</div></div>
+        <div class="timeline" id="tl-google"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Mercado Livre — linha do tempo</div></div>
+        <div class="timeline" id="tl-ml"></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Amazon — linha do tempo</div></div>
+        <div class="timeline" id="tl-amazon"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">TikTok Shop / Meta Catalog — linha do tempo</div></div>
+        <div class="timeline" id="tl-tiktok"></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="card-head"><div class="card-title">Comparativo: dias para recuperar posição (por canal)</div></div>
+      <div style="position:relative;height:220px"><canvas id="recovChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       CALCULADORA
+  ════════════════════════════════════════════════════ -->
+  <section id="calculadora">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red-bg);border:1px solid var(--red-border)">💰</div>
+      <div><div class="sec-title">Calculadora de Perda Financeira por Ruptura</div><div class="sec-sub">Estime o impacto mensal em receita, ads e marketplace — interativo</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="card">
+      <div class="calc-grid">
+        <div>
+          <div class="calc-field">
+            <div class="calc-label">Receita mensal bruta <span id="v-rev">R$ 50.000</span></div>
+            <input type="range" id="sl-rev" min="5000" max="500000" step="5000" value="50000"/>
+          </div>
+          <div class="calc-field">
+            <div class="calc-label">% de SKUs em ruptura <span id="v-oos">22,7%</span></div>
+            <input type="range" id="sl-oos" min="1" max="35" step="0.5" value="22.7"/>
+          </div>
+          <div class="calc-field">
+            <div class="calc-label">Taxa de conversão atual <span id="v-conv">2,5%</span></div>
+            <input type="range" id="sl-conv" min="0.5" max="8" step="0.1" value="2.5"/>
+          </div>
+          <div class="calc-field">
+            <div class="calc-label">Investimento mensal em Ads <span id="v-ads">R$ 5.000</span></div>
+            <input type="range" id="sl-ads" min="500" max="100000" step="500" value="5000"/>
+          </div>
+          <div class="calc-field">
+            <div class="calc-label">Ticket médio <span id="v-ticket">R$ 380</span></div>
+            <input type="range" id="sl-ticket" min="50" max="3000" step="10" value="380"/>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="calc-r-label">Perda mensal estimada total</div>
+          <div class="calc-r-val" id="cr-total">—</div>
+          <div class="calc-r-sub" id="cr-pct">— da receita potencial perdida</div>
+          <div class="calc-r-breakdown">
+            <div class="calc-r-item"><span class="calc-r-item-label">Receita não capturada (FDE)</span><span class="calc-r-item-val" id="cr-oos">—</span></div>
+            <div class="calc-r-item"><span class="calc-r-item-label">Ads desperdiçados (sem conversão)</span><span class="calc-r-item-val" id="cr-ads-lost">—</span></div>
+            <div class="calc-r-item"><span class="calc-r-item-label">Queda de ranking (perda futura)</span><span class="calc-r-item-val" id="cr-rank">—</span></div>
+            <div class="calc-r-item"><span class="calc-r-item-label">Vendas perdidas em mkt. (est.)</span><span class="calc-r-item-val" id="cr-mkt">—</span></div>
+            <div class="calc-r-item" style="border-top:1px solid var(--border2);margin-top:4px;padding-top:12px;background:transparent">
+              <span class="calc-r-item-label" style="font-weight:500;color:var(--text)">Meta de FDE saudável (&lt;5%)</span>
+              <span class="calc-r-item-val" style="color:var(--green)" id="cr-target">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       MAC METAIS VINTAGE
+  ════════════════════════════════════════════════════ -->
+  <section id="mac">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--gold-bg);border:1px solid rgba(217,119,6,.3)">🏆</div>
+      <div><div class="sec-title">Análise Dedicada — MAC Metais Vintage</div><div class="sec-sub">Setor Louças & Metais Sanitários · impacto por canal · recomendações operacionais</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="mac-hero">
+      <div class="mac-badge">🔩 Louças & Metais Sanitários · Construção</div>
+      <div class="mac-title"><strong>MAC Metais Vintage</strong> — Posição no Benchmark 2025/2026</div>
+      <p class="mac-desc">O setor de Louças & Metais Sanitários opera com <strong>22,7% de FDE no Brasil</strong> — zona crítica consolidada. A análise abaixo mapeia o impacto específico desse nível de ruptura em cada canal onde a MAC Metais Vintage atua ou pode atuar, com estimativa de perda financeira e roadmap de ação prioritária.</p>
+    </div>
+    <div class="mac-kpis">
+      <div class="mac-kpi"><div class="mac-kpi-label">FDE Brasil</div><div class="mac-kpi-val" style="color:var(--red)">22,7%</div><div class="mac-kpi-sub">Zona crítica · benchmark</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">FDE EUA (referência)</div><div class="mac-kpi-val" style="color:var(--amber)">13,9%</div><div class="mac-kpi-sub">Atenção · Home Depot/Lowe's</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">FDE Europa</div><div class="mac-kpi-val" style="color:var(--amber)">11,9%</div><div class="mac-kpi-sub">Atenção · mercado maduro</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">Meta saudável BR</div><div class="mac-kpi-val" style="color:var(--green)">< 8%</div><div class="mac-kpi-sub">Viável com 90 dias estoque</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">Lead time importação</div><div class="mac-kpi-val">90–120d</div><div class="mac-kpi-sub">Metais premium Europa/Ásia</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">Índice Risco Composto</div><div class="mac-kpi-val" style="color:var(--red)">76/100</div><div class="mac-kpi-sub">Crítico · ação imediata</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;overflow-x:auto">
+      <div class="card-head"><div class="card-title">Impacto por canal — Louças & Metais Sanitários BR (22,7% FDE)</div></div>
+      <table class="mkt-table" id="mac-channel-table"></table>
+    </div>
+
+    <div class="sec-head" style="margin-top:8px;margin-bottom:16px">
+      <div class="sec-title" style="font-size:13px">Roadmap de ação prioritária</div><div class="sec-line"></div>
+    </div>
+    <div class="rec-cards" id="rec-cards"></div>
+
+    <div class="chart-card">
+      <div class="card-head"><div class="card-title">Cenários: impacto financeiro com diferentes níveis de FDE — MAC Metais Vintage</div></div>
+      <div style="position:relative;height:280px"><canvas id="macChart"></canvas></div>
+      <div class="ch-legend">
+        <span><i style="background:#EF4444"></i>Receita perdida (FDE)</span>
+        <span><i style="background:#F59E0B"></i>Ads desperdiçados</span>
+        <span><i style="background:#A855F7"></i>Perda em marketplaces</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <div class="card" style="margin-top:24px">
+    <div class="card-head"><div class="card-title">Fontes & Metodologia</div></div>
+    <p style="font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:14px">Os percentuais consolidam dados de relatórios setoriais publicados em 2025/2026. Ruptura de estoque (FDE) = % de SKUs ativos indisponíveis para compra em 30 dias. Impactos em ads e marketplaces baseados em estudos de plataforma, relatórios de agências e dados publicados pelas próprias empresas. Calculadora usa modelo simplificado para estimativa gerencial.</p>
+    <div class="meth-grid">
+      <div class="meth-item"><strong>Dados FDE</strong><p>Neogrid 2025 · Lett E-Commerce · IHL Group · IBEVAR · Forrester Research · NRF · CBIC</p></div>
+      <div class="meth-item"><strong>Ads Impact</strong><p>Google Merchant Center Help · Meta Business Insights · WordStream ROAS benchmarks · SEMrush 2025</p></div>
+      <div class="meth-item"><strong>Marketplaces</strong><p>Amazon Seller Central Policy · Mercado Livre Reputação · Leroy Merlin Seller · TikTok Shop guidelines</p></div>
+      <div class="meth-item"><strong>Fator Tarifa EUA</strong><p>Tarifas Trump 25–145% sobre importados (China/México) elevaram FDE em eletrônicos, construção e auto-peças nos EUA em 2025</p></div>
+      <div class="meth-item"><strong>Fator Selic BR</strong><p>Selic a 10,5%+ aumenta custo de carregamento de estoque, desincentivando antecipação de compra pelos varejistas</p></div>
+      <div class="meth-item"><strong>Calculadora</strong><p>Modelo gerencial estimativo. Perdas reais variam conforme categoria, sazonalidade e mix de canais. Use como referência direcional.</p></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div><div class="footer-brand">StockOut Index · E-commerce Benchmark Global</div><div style="margin-top:4px">Neogrid · Lett · ABRAS · ABIACOM · IHL Group · NRF · Forrester · CBIC · 2025/2026</div></div>
+    <div class="footer-author">Alexandre Romualdo · Analista de E-Commerce · Departamento Operacional MAC METAIS VINTAGE · Março de 2026</div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════
+   DATA
+═══════════════════════════════ */
+const SECTORS = [
+  {id:'livros',label:'Livros & Mídia',br:3.8,us:1.8,eu:1.7,cn:1.5,in:3.1,gl:2.3,adsImpact:1,mktImpact:1,
+   insight:'Melhor desempenho global 2025. Digitalização (e-books, audiobooks) reduziu dependência de estoque físico. Plataformas integradas de WMS mantêm índice abaixo de 4% no Brasil.'},
+  {id:'alimentos',label:'Alimentos & Bebidas',br:7.4,us:4.8,eu:3.9,cn:5.5,in:9.3,gl:5.9,adsImpact:2,mktImpact:2,
+   insight:'Neogrid (mar/2025) registrou 12,9% de ruptura no varejo físico BR. Quick commerce (iFood Shop, Rappi) reduziu FDE em capitais, mas interior e Norte/CO seguem problemáticos com cold chain.'},
+  {id:'eletronicos',label:'Eletrônicos & TI',br:10.9,us:7.2,eu:5.3,cn:3.5,in:11.8,gl:6.8,adsImpact:4,mktImpact:5,
+   insight:'Tarifas Trump (2025) elevaram FDE nos EUA em produtos chineses. Escassez de GPUs e AI chips afeta mercado premium. Brasil mantém alta dependência de importação com II elevado.'},
+  {id:'farmacia',label:'Farmácia & Saúde',br:10.7,us:6.5,eu:5.7,cn:6.3,in:12.4,gl:7.5,adsImpact:3,mktImpact:3,
+   insight:'Serialização obrigatória (Anvisa) e FDA aumentaram complexidade logística em 2025. Norte e Centro-Oeste BR com índices 40% acima da média nacional.'},
+  {id:'beleza',label:'Beleza & Cuidados',br:12.4,us:7.9,eu:7.1,cn:5.8,in:13.7,gl:8.5,adsImpact:4,mktImpact:4,
+   insight:'TikTok Shop viraliza produtos instantaneamente — estoque zera em horas. Brasil é 4º maior mercado de beleza global (ABIHPEC 2025) mas com cadeia de suprimento ainda amadurecendo.'},
+  {id:'moda',label:'Moda & Vestuário',br:14.1,us:9.4,eu:8.5,cn:7.5,in:15.2,gl:10.1,adsImpact:4,mktImpact:4,
+   insight:'Grade XS–5XL multiplicou SKUs. Shein e Shopee pressionam varejistas locais. Moda é o setor com maior número de SKUs descontinuados por baixo desempenho algorítmico no ML.'},
+  {id:'esportes',label:'Esportes & Outdoor',br:14.6,us:9.6,eu:8.8,cn:7.2,in:15.5,gl:10.0,adsImpact:3,mktImpact:3,
+   insight:'Ciclo Copa 2026 (preparação) e picos de eventos criam demanda imprevisível. IA preditiva pode reduzir 40% da ruptura neste setor (McKinsey 2025).'},
+  {id:'brinquedos',label:'Brinquedos & Games',br:19.8,us:14.2,eu:12.3,cn:7.9,in:18.9,gl:13.5,adsImpact:5,mktImpact:5,
+   insight:'Tarifas Trump afetaram Natal 2025 nos EUA com pico de ruptura em brinquedos chineses. Brasil: Ri Happy com +90,5% de tráfego em dez/2025 mas FDE crítico em itens específicos.'},
+  {id:'casa',label:'Casa & Decoração',br:18.1,us:12.8,eu:11.1,cn:9.0,in:17.3,gl:12.8,adsImpact:3,mktImpact:3,
+   insight:'Segmento Casa/Jardim gerou R$ 49,3 mi/mês no e-commerce BR (ABCOMM 2025). MCMV acelerou demanda estrutural. Lead times asiáticos de 60–90 dias dificultam reposição.'},
+  {id:'autopecas',label:'Auto & Peças',br:24.8,us:18.3,eu:13.9,cn:9.5,in:22.1,gl:16.3,adsImpact:3,mktImpact:4,
+   insight:'Setor mais impactado pelas tarifas Trump: peças do México e China com tarifa 25–145%. Brasil com 100k+ SKUs e carga tributária de importados. FDE sistêmico exige gestão de long-tail.'},
+  {id:'loucas',label:'Louças & Metais Sanitários',br:22.7,us:13.9,eu:11.9,cn:8.3,in:19.4,gl:14.5,adsImpact:4,mktImpact:4,
+   insight:'Lead times de 90–120 dias para metais premium (Hansgrohe, Grohe, Deca). Demanda por reforma residencial impulsionada por crédito habitacional. Digitalização do setor ainda incipiente.'},
+  {id:'construcao',label:'Construção Civil & Home',br:26.3,us:16.8,eu:13.2,cn:10.1,in:23.2,gl:17.4,adsImpact:3,mktImpact:3,
+   insight:'Maior FDE 2025 no Brasil. Selic 10,5%+ aumenta custo de carregamento. MCMV: 1,26 mi unidades contratadas. EUA sofre com tarifas sobre madeira canadense e aço/alumínio.'},
+];
+
+const CTRS={br:'Brasil',us:'EUA',eu:'Europa',cn:'China',in:'Índia',gl:'Global'};
+const FLAGS={br:'🇧🇷',us:'🇺🇸',eu:'🇪🇺',cn:'🇨🇳',in:'🇮🇳',gl:'🌐'};
+const CLRS={br:'#3B82F6',us:'#A78BFA',eu:'#34D399',cn:'#FB7185',in:'#FBBF24',gl:'#94A3B8'};
+
+let activeCtr='br', activeSector=null, chartMode='br_gl';
+let mainChartInst=null, roasChartInst=null, mktChartInst=null, orgChartInst=null, recovChartInst=null, macChartInst=null;
+
+/* ═══════════════════════════════
+   HELPERS
+═══════════════════════════════ */
+function st(v){
+  if(v<5) return{label:'Saudável',cls:'tg',color:'#22C55E',bg:'rgba(34,197,94,.08)'};
+  if(v<15) return{label:'Atenção',cls:'ta',color:'#F59E0B',bg:'rgba(245,158,11,.08)'};
+  return{label:'Crítico',cls:'tr',color:'#EF4444',bg:'rgba(239,68,68,.08)'};
+}
+function bc(v){if(v<5)return'#22C55E';if(v<15)return'#F59E0B';return'#EF4444';}
+function fmtR(n){return'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function fmtPct(n){return n.toFixed(1)+'%';}
+function grd(a,b,c,d){const s=document.createElement('style');s.textContent=``;return s;}
+const gridColor='rgba(255,255,255,0.04)';
+const textColor='rgba(255,255,255,0.32)';
+
+/* ═══════════════════════════════
+   KPIs
+═══════════════════════════════ */
+function calcKPIs(){
+  const brs=SECTORS.map(s=>s.br), uss=SECTORS.map(s=>s.us), gls=SECTORS.map(s=>s.gl);
+  const avg=arr=>arr.reduce((a,b)=>a+b,0)/arr.length;
+  document.getElementById('kpi-br').innerHTML=avg(brs).toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-us').innerHTML=avg(uss).toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-gl').innerHTML=avg(gls).toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-crit').innerHTML=SECTORS.filter(s=>s.br>15).length+'<sup>/12</sup>';
+  const best=SECTORS.reduce((a,b)=>a.br<b.br?a:b);
+  document.getElementById('kpi-best').innerHTML=best.br.toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-best-n').textContent=best.label;
+  document.getElementById('kpi-gap').innerHTML=(avg(brs)-avg(uss)).toFixed(1)+'<sup>pp</sup>';
+}
+
+/* ═══════════════════════════════
+   SECTOR TABLE
+═══════════════════════════════ */
+function buildTable(){
+  const sorted=[...SECTORS].sort((a,b)=>b[activeCtr]-a[activeCtr]);
+  const max=Math.max(...sorted.map(s=>s[activeCtr]));
+  const tbody=document.getElementById('stbody');
+  tbody.innerHTML='';
+  sorted.forEach(s=>{
+    const v=s[activeCtr],stv=st(v),w=Math.round(v/max*100);
+    const tr=document.createElement('tr');
+    if(activeSector&&activeSector.id===s.id) tr.classList.add('sel');
+    tr.innerHTML=`<td><span class="sn">${s.label}</span></td>
+      <td><span class="sv ${stv.cls.replace('t','')}" style="color:${bc(v)}">${v.toFixed(1)}%</span></td>
+      <td><div class="sbar-w"><div class="sbar" style="width:${w}%;background:${bc(v)}"></div></div></td>
+      <td><span class="stag ${stv.cls}">${stv.label}</span></td>`;
+    tr.onclick=()=>{activeSector=s;buildTable();renderDetail();};
+    tbody.appendChild(tr);
+  });
+  document.getElementById('ctr-label').textContent=CTRS[activeCtr];
+}
+
+/* ═══════════════════════════════
+   DETAIL PANEL
+═══════════════════════════════ */
+function renderDetail(){
+  if(!activeSector){return;}
+  const s=activeSector;
+  const cmpHtml=Object.entries(CTRS).map(([k,lbl])=>{
+    const v=s[k],stv=st(v);
+    return `<div class="cmp"><div class="cmp-c">${FLAGS[k]} ${lbl}</div>
+      <div class="cmp-v" style="color:${bc(v)}">${v.toFixed(1)}<span style="font-size:12px;color:var(--text2)">%</span></div>
+      <span class="cmp-s ${stv.cls}">${stv.label}</span></div>`;
+  }).join('');
+  const needle=Math.min(s.br/30*100,100).toFixed(1);
+  document.getElementById('detail-panel').innerHTML=`
+    <div style="font-size:16px;font-weight:300;color:var(--text);margin-bottom:4px">${s.label}</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:16px">FDE por mercado · Base 2025/2026</div>
+    <div class="cmp-grid">${cmpHtml}</div>
+    <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Posição BR na escala de risco (0–30%)</div>
+    <div style="position:relative;margin-bottom:5px">
+      <div class="risk-bar">
+        <div class="risk-seg" style="width:16.67%;background:linear-gradient(90deg,#14532D,#22C55E)"></div>
+        <div class="risk-seg" style="width:33.33%;background:linear-gradient(90deg,#78350F,#F59E0B)"></div>
+        <div class="risk-seg" style="width:50%;background:linear-gradient(90deg,#7F1D1D,#EF4444)"></div>
+        <div class="risk-needle" style="left:calc(${needle}% - 1px)"></div>
+      </div>
+    </div>
+    <div class="risk-labels"><span>0%</span><span>5%</span><span>15%</span><span>30%</span></div>
+    <div class="insight"><strong>Análise 2025:</strong> ${s.insight}</div>`;
+}
+
+/* ═══════════════════════════════
+   MAIN CHART
+═══════════════════════════════ */
+function buildMainChart(){
+  if(mainChartInst) mainChartInst.destroy();
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  const labels=SECTORS.map(s=>s.label.length>13?s.label.slice(0,12)+'…':s.label);
+  let datasets,legendHtml;
+  if(chartMode==='br_gl'){
+    datasets=[
+      {label:'Brasil',data:SECTORS.map(s=>s.br),backgroundColor:'#3B82F6BB',borderRadius:3,barPercentage:.45},
+      {label:'Global',data:SECTORS.map(s=>s.gl),backgroundColor:'#94A3B877',borderRadius:3,barPercentage:.45},
+    ];
+    legendHtml='<span><i style="background:#3B82F6"></i>🇧🇷 Brasil</span><span><i style="background:#94A3B8"></i>🌐 Global</span>';
+  } else {
+    const ks=Object.keys(CTRS);
+    datasets=ks.map(k=>({label:CTRS[k],data:SECTORS.map(s=>s[k]),backgroundColor:CLRS[k]+'AA',borderRadius:2,barPercentage:.75}));
+    legendHtml=ks.map(k=>`<span><i style="background:${CLRS[k]}"></i>${FLAGS[k]} ${CTRS[k]}</span>`).join('');
+  }
+  document.getElementById('main-legend').innerHTML=legendHtml;
+  mainChartInst=new Chart(ctx,{
+    type:'bar',data:{labels,datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`}}},
+      scales:{x:{ticks:{color:textColor,font:{size:9},autoSkip:false,maxRotation:38},grid:{display:false},border:{color:'rgba(255,255,255,.06)'}},
+        y:{min:0,max:30,ticks:{color:textColor,font:{size:9},callback:v=>v+'%'},grid:{color:gridColor},border:{color:'rgba(255,255,255,.06)'}}}},
+    plugins:[{id:'z',beforeDraw(chart){
+      const{ctx,chartArea:{left,right,top,bottom},scales:{y}}=chart;
+      const y5=y.getPixelForValue(5),y15=y.getPixelForValue(15);
+      ctx.save();
+      [[y5,bottom,'rgba(34,197,94,.04)'],[y15,y5,'rgba(245,158,11,.04)'],[top,y15,'rgba(239,68,68,.07)']].forEach(([t,b,c])=>{ctx.fillStyle=c;ctx.fillRect(left,t,right-left,b-t);});
+      [{v:5,c:'rgba(245,158,11,.5)',l:'5%'},{v:15,c:'rgba(239,68,68,.6)',l:'15%'}].forEach(({v,c,l})=>{
+        const py=y.getPixelForValue(v);
+        ctx.strokeStyle=c;ctx.lineWidth=1;ctx.setLineDash([4,4]);
+        ctx.beginPath();ctx.moveTo(left,py);ctx.lineTo(right,py);ctx.stroke();
+        ctx.setLineDash([]);ctx.fillStyle=c;ctx.font='9px DM Sans,sans-serif';ctx.fillText(l,left+3,py-3);
+      });
+      ctx.restore();
+    }}]
+  });
+}
+
+/* ═══════════════════════════════
+   WORLD TABLES
+═══════════════════════════════ */
+function buildWT(id,sid){
+  const s=SECTORS.find(x=>x.id===sid);
+  const rows=Object.entries(CTRS).map(([k,l])=>({k,l,v:s[k]})).sort((a,b)=>b.v-a.v);
+  const max=rows[0].v;
+  const tbl=document.getElementById(id);
+  tbl.innerHTML='<thead><tr><th>País</th><th>FDE %</th><th>Escala</th><th>Status</th></tr></thead>';
+  const tbody=document.createElement('tbody');
+  rows.forEach(({k,l,v})=>{
+    const stv=st(v),w=Math.round(v/max*100);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div class="flag-cell"><span>${FLAGS[k]}</span><span>${l}</span></div></td>
+      <td style="font-weight:500;font-family:'DM Mono',monospace;color:${bc(v)}">${v.toFixed(1)}%</td>
+      <td><div class="mbar"><div class="mbar-t"><div class="mbar-f" style="width:${w}%;background:${bc(v)}"></div></div></div></td>
+      <td><span class="stag ${stv.cls}">${stv.label}</span></td>`;
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+}
+
+/* ═══════════════════════════════
+   RISK INDEX
+═══════════════════════════════ */
+function buildRiskCards(){
+  const cont=document.getElementById('risk-cards');
+  const scored=SECTORS.map(s=>{
+    const oosScore=Math.min(s.br/30*50,50);
+    const adsScore=s.adsImpact*5;
+    const mktScore=s.mktImpact*5;
+    const total=Math.round(oosScore+adsScore+mktScore);
+    return{...s,irc:total};
+  }).sort((a,b)=>b.irc-a.irc);
+  scored.forEach(s=>{
+    const col=s.irc>=60?'var(--red)':s.irc>=30?'var(--amber)':'var(--green)';
+    const cls=s.irc>=60?'tr':s.irc>=30?'ta':'tg';
+    const lbl=s.irc>=60?'Crítico':s.irc>=30?'Atenção':'Saudável';
+    const div=document.createElement('div');
+    div.className='rc';
+    div.innerHTML=`<div class="rc-name">${s.label}</div>
+      <div class="rc-score-row">
+        <div class="rc-score" style="color:${col}">${s.irc}<span style="font-size:14px;color:var(--text2)">/100</span></div>
+        <span class="rc-badge ${cls}">${lbl}</span>
+      </div>
+      <div class="rc-bar-track"><div class="rc-bar-fill" style="width:${s.irc}%;background:${col}"></div></div>
+      <div class="rc-subs">
+        <span class="rc-sub">FDE BR: ${s.br.toFixed(1)}%</span>
+        <span class="rc-sub">Ads: ${['','Baixo','Médio','Alto','Muito alto','Crítico'][s.adsImpact]}</span>
+        <span class="rc-sub">Mkt: ${['','Baixo','Médio','Alto','Muito alto','Crítico'][s.mktImpact]}</span>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+/* ═══════════════════════════════
+   ADS GRID
+═══════════════════════════════ */
+function buildAdsGrid(){
+  const platforms=[
+    {name:'Google Shopping',icon:'🛍️',bg:'#1A73E8',roas:'-68%',cpc:'+34%',note:'FDE suspende o produto do feed de shopping imediatamente. Ao reativar, o histórico de quality score é zerado — recuperação leva 2–4 semanas e exige reinvestimento para recuperar posição.',metrics:[{l:'Queda de ROAS (FDE)',v:'-68%',c:'red'},{l:'Aumento de CPC pós-rupt.',v:'+34%',c:'amber'}]},
+    {name:'Meta Catalog Ads',icon:'📘',bg:'#1877F2',roas:'-73%',cpc:'+41%',note:'Produtos sem estoque são automaticamente excluídos do catálogo dinâmico. Campanhas de remarketing perdem cobertura. O algoritmo penaliza o CPM de toda a campanha por aumento de frequência sem conversão.',metrics:[{l:'Queda de ROAS',v:'-73%',c:'red'},{l:'Aumento de CPM',v:'+41%',c:'amber'}]},
+    {name:'Google Merchant Center',icon:'🏪',bg:'#34A853',roas:'-100%',cpc:'Suspenso',note:'Produto com estoque 0 é suspenso do Merchant Center imediatamente. Reativação manual necessária. Histórico de performance do item é preservado mas posição no leilão é perdida.',metrics:[{l:'Exposição (FDE)',v:'Zero',c:'red'},{l:'Tempo de reativação',v:'1–3 dias',c:'amber'}]},
+    {name:'Google Search',icon:'🔍',bg:'#4285F4',roas:'-52%',cpc:'+18%',note:'Anúncios de busca em marca continuam exibindo, mas a landing page com produto FDE gera rejeição imediata, elevando bounce rate e reduzindo Quality Score da conta inteira, não só do produto.',metrics:[{l:'Queda de ROAS',v:'-52%',c:'red'},{l:'Aumento de CPC conta',v:'+18%',c:'amber'}]},
+    {name:'Meta Performance Max',icon:'🎯',bg:'#0866FF',roas:'-61%',cpc:'+28%',note:'P.Max aprende com conversões. Sem estoque, o modelo de IA para de otimizar para aquele SKU e leva 3–5 semanas para reaprender após reabastecimento, mesmo com dados históricos disponíveis.',metrics:[{l:'Queda de ROAS',v:'-61%',c:'red'},{l:'Perda de aprendizado',v:'3–5 sem.',c:'amber'}]},
+    {name:'TikTok Ads',icon:'🎵',bg:'#010101',roas:'-80%',cpc:'+55%',note:'TikTok Ads é o canal mais volátil: produto viral sem estoque gera onda de rejeição que colapsa a conta do anunciante. O algoritmo interpreta como fraude e pode suspender a conta.',metrics:[{l:'Queda de ROAS viral',v:'-80%',c:'red'},{l:'Risco de suspensão',v:'Alto',c:'red'}]},
+  ];
+  const grid=document.getElementById('ads-grid');
+  platforms.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='ads-card';
+    div.innerHTML=`<div class="ads-platform">
+      <div class="ads-logo" style="background:${p.bg}20;border:1px solid ${p.bg}30">${p.icon}</div>
+      <div class="ads-pname">${p.name}</div>
+    </div>
+    ${p.metrics.map(m=>`<div class="ads-metric">
+      <div class="ads-metric-label">${m.l}</div>
+      <div class="ads-metric-val ${m.c}">${m.v}</div>
+    </div>`).join('')}
+    <div class="ads-note">${p.note}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+/* ROAS CHART */
+function buildRoasChart(){
+  const ctx=document.getElementById('roasChart').getContext('2d');
+  const oosLevels=[0,5,10,15,20,25,30];
+  new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:oosLevels.map(v=>v+'%'),
+      datasets:[
+        {label:'Google Shopping',data:[100,72,52,38,28,18,10],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,.08)',tension:.4,borderWidth:2,pointRadius:3,fill:true},
+        {label:'Meta Catalog Ads',data:[100,68,46,30,18,10,5],borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.05)',tension:.4,borderWidth:2,pointRadius:3,fill:true},
+        {label:'Google Search (marca)',data:[100,80,64,50,38,28,18],borderColor:'#F59E0B',backgroundColor:'rgba(245,158,11,.05)',tension:.4,borderWidth:2,pointRadius:3,fill:true},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(0)}% do ROAS base`}}},
+      scales:{
+        x:{ticks:{color:textColor,font:{size:10}},grid:{color:gridColor},title:{display:true,text:'% de SKUs em Fora de Estoque',color:textColor,font:{size:10}}},
+        y:{ticks:{color:textColor,font:{size:10},callback:v=>v+'%'},grid:{color:gridColor},title:{display:true,text:'ROAS (base = 100%)',color:textColor,font:{size:10}},min:0,max:110}
+      }
+    }
+  });
+}
+
+/* ═══════════════════════════════
+   MARKETPLACE TABLE
+═══════════════════════════════ */
+function buildMktTable(){
+  const mkts=[
+    {name:'Amazon BR & EUA',icon:'📦',bg:'#FF9900',severity:'Crítico',cls:'tr',recovery:'3–8 semanas',impact:'Perda de Buy Box imediata. FDE frequente remove listing da primeira página. Histórico de FDE penaliza Seller Score permanentemente. No EUA, tarifas 2025 agravaram ruptura em eletrônicos e auto-peças.'},
+    {name:'Mercado Livre',icon:'🛒',bg:'#FFE600',severity:'Crítico',cls:'tr',recovery:'4–10 semanas',impact:'Pedido cancelado por FDE impacta o termômetro de reputação (verde→amarelo→vermelho). Queda de reputação = redução automática de exposição em todas as categorias do seller. Recuperação de termômetro leva 60+ dias de bom desempenho.'},
+    {name:'Leroy Merlin',icon:'🏗️',bg:'#007832',severity:'Alto',cls:'ta',recovery:'2–4 semanas',impact:'Produto FDE é desativado do marketplace. Para reativar, seller precisa contatar suporte. Setores Construção e Metais têm baixa tolerância a FDE pois projetos de obra não aceitam atrasos.'},
+    {name:'TikTok Shop',icon:'🎵',bg:'#010101',severity:'Crítico',cls:'tr',recovery:'Imprevisível',impact:'Produto viral sem estoque é retirado dos feeds For You em tempo real. Pior cenário: produto viraliza, esgota em horas e todo o impulso orgânico e pago é perdido. Recuperação depende de novo viral — sem garantia de prazo.'},
+    {name:'AliExpress',icon:'🌐',bg:'#E43226',severity:'Médio',cls:'ta',recovery:'1–3 semanas',impact:'Seller score impactado por cancelamentos FDE. Produtos FDE frequentes perdem badge de "Envio Rápido" e visibilidade nas páginas de categoria. Penalização menos severa que Amazon e ML.'},
+    {name:'Nuvemshop',icon:'☁️',bg:'#6C5CE7',severity:'Baixo',cls:'tg',recovery:'Imediato',impact:'Plataforma própria sem penalização algorítmica direta por FDE. Impacto se dá pelo lado do cliente: produto indisponível no site gera abandono e não há algoritmo de terceiros para recuperar. Google Shopping (integrado) sim penaliza.'},
+  ];
+  const tbl=document.getElementById('mkt-table');
+  tbl.innerHTML='<thead><tr><th>Marketplace</th><th>Severidade</th><th>Recuperação</th><th>Impacto específico</th></tr></thead>';
+  const tbody=document.createElement('tbody');
+  mkts.forEach(m=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div class="mkt-name"><div class="mkt-icon" style="background:${m.bg}18;border:1px solid ${m.bg}25">${m.icon}</div>${m.name}</div></td>
+      <td><span class="stag ${m.cls}">${m.severity}</span></td>
+      <td><span class="recovery">${m.recovery}</span></td>
+      <td><span class="mkt-impact">${m.impact}</span></td>`;
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+}
+
+/* MKT CHART */
+function buildMktChart(){
+  const ctx=document.getElementById('mktChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Amazon','Mercado\nLivre','Leroy\nMerlin','TikTok\nShop','AliExpress','Nuvemshop'],
+      datasets:[{
+        label:'Severidade (1–5)',
+        data:[5,5,4,5,3,1],
+        backgroundColor:['#EF4444AA','#EF4444AA','#F59E0BAA','#EF4444AA','#F59E0BAA','#22C55EAA'],
+        borderRadius:4,
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>{const l=['','Mínimo','Baixo','Médio','Alto','Crítico'];return` ${l[c.parsed.y]}`;}}}},
+      scales:{x:{ticks:{color:textColor,font:{size:10}},grid:{display:false}},
+        y:{min:0,max:5,ticks:{color:textColor,font:{size:10},stepSize:1},grid:{color:gridColor}}}}
+  });
+}
+
+/* ORG CHART */
+function buildOrgChart(){
+  const ctx=document.getElementById('orgChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:SECTORS.map(s=>s.label.length>11?s.label.slice(0,10)+'…':s.label),
+      datasets:[{label:'Dependência de ranking',data:SECTORS.map(s=>s.mktImpact),
+        backgroundColor:SECTORS.map(s=>{const pct=s.mktImpact/5;return`rgba(${Math.round(239*pct+34*(1-pct))},${Math.round(68*pct+197*(1-pct))},${Math.round(68*pct+94*(1-pct))},.7)`;}),
+        borderRadius:3}]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>{const l=['','Mínima','Baixa','Média','Alta','Crítica'];return` ${l[c.parsed.x]}`;}}}},
+      scales:{x:{min:0,max:5,ticks:{color:textColor,font:{size:9},stepSize:1},grid:{color:gridColor}},
+        y:{ticks:{color:textColor,font:{size:9}},grid:{display:false}}}}
+  });
+}
+
+/* ═══════════════════════════════
+   RECOVERY TIMELINES
+═══════════════════════════════ */
+function buildTimeline(id,items){
+  const cont=document.getElementById(id);
+  items.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='tl-item';
+    const dotClr=item.severity==='critical'?'#EF4444':item.severity==='warn'?'#F59E0B':'#22C55E';
+    div.innerHTML=`<div class="tl-dot" style="border-color:${dotClr};background:${dotClr}18">
+      <div class="tl-dot-inner" style="background:${dotClr}"></div></div>
+      <div class="tl-day">${item.time}</div>
+      <div class="tl-title">${item.title}</div>
+      <div class="tl-desc">${item.desc}</div>`;
+    cont.appendChild(div);
+  });
+}
+
+function buildAllTimelines(){
+  buildTimeline('tl-google',[
+    {time:'Dia 1',severity:'critical',title:'Produto suspenso do feed',desc:'Merchant Center detecta estoque 0 e remove o produto do Google Shopping imediatamente. Sem impressões, sem cliques.'},
+    {time:'Dias 1–3',severity:'critical',title:'Anúncios continuam cobrados',desc:'Campanhas de search com o produto ainda ativas pagam por cliques que chegam a página sem estoque — taxa de rejeição dispara.'},
+    {time:'Dias 3–7',severity:'warn',title:'Quality Score degradado',desc:'Google interpreta alta taxa de rejeição como landing page de baixa qualidade. CPCs da conta inteira começam a subir 10–20%.'},
+    {time:'Reabastecimento',severity:'warn',title:'Reativação manual necessária',desc:'Não é automático. Seller deve reativar o produto no Merchant Center e aguardar aprovação (1–3 dias).'},
+    {time:'Semanas 1–2',severity:'warn',title:'Posição em leilão zerada',desc:'Histórico de quality score do produto é resetado. Produto começa no fim da fila de leilão.'},
+    {time:'Semanas 3–6',severity:'green',title:'Recuperação parcial',desc:'Com investimento consistente, o produto recupera 60–80% da posição anterior. Recuperação total pode levar 2–3 meses.'},
+  ]);
+  buildTimeline('tl-ml',[
+    {time:'Dia 1',severity:'critical',title:'Pedido cancelado por FDE',desc:'Cada cancelamento por falta de estoque impacta o indicador "Cancelamentos" do termômetro de reputação do seller.'},
+    {time:'Dias 3–7',severity:'critical',title:'Termômetro cai para Amarelo',desc:'Com 3+ cancelamentos FDE em 60 dias, reputação cai de Verde para Amarelo. Exposição cai automaticamente 20–35%.'},
+    {time:'Dias 7–15',severity:'critical',title:'Risco de Laranja/Vermelho',desc:'FDE recorrente sem ação leva o termômetro para Laranja (exposição -50%) ou Vermelho (suspensão temporária de novas vendas).'},
+    {time:'Reabastecimento',severity:'warn',title:'Produto reativado automaticamente',desc:'Ao atualizar estoque, produto volta ao ar imediatamente, mas a reputação do seller permanece degradada.'},
+    {time:'Semanas 4–8',severity:'warn',title:'Recuperação de reputação lenta',desc:'ML exige 60 dias de performance positiva contínua para mover o termômetro de volta. Não há atalho.'},
+    {time:'Semana 10+',severity:'green',title:'Reputação normalizada',desc:'Com zero cancelamentos e métricas positivas, seller retorna ao Verde. Posição de produto melhora gradualmente.'},
+  ]);
+  buildTimeline('tl-amazon',[
+    {time:'Dia 1',severity:'critical',title:'Buy Box perdida',desc:'Produto FDE perde a Buy Box instantaneamente. Se há outros sellers do mesmo item, eles assumem. Se não há, o produto some da busca.'},
+    {time:'Dias 1–14',severity:'critical',title:'Ranking orgânico cai',desc:'A1 (algoritmo da Amazon) penaliza produtos com histórico de FDE no ranqueamento de busca — efeito de longo prazo.'},
+    {time:'Reabastecimento',severity:'warn',title:'Buy Box recuperada (se seller único)',desc:'Sem concorrentes, Buy Box retorna ao reabastecimento. Com concorrentes, precisa de preço competitivo e FBA para reconquistar.'},
+    {time:'Semanas 2–4',severity:'warn',title:'Ranking começa a subir',desc:'Algoritmo leva 2–4 semanas para recalibrar o ranking após histórico de FDE ser "diluído" por novas vendas.'},
+    {time:'Semanas 4–8',severity:'green',title:'Posição próxima ao anterior',desc:'Produtos com alto histórico de vendas recuperam mais rápido. Novos produtos ou baixo volume de vendas podem demorar meses.'},
+  ]);
+  buildTimeline('tl-tiktok',[
+    {time:'Hora 1',severity:'critical',title:'Produto viral sem estoque',desc:'Pior cenário do e-commerce moderno: conteúdo atinge For You Page, engajamento explode e o produto zera em minutos.'},
+    {time:'Horas 1–6',severity:'critical',title:'Rejeições massivas',desc:'Usuários clicam, chegam ao shop sem estoque e saem. TikTok interpreta como conteúdo de baixa relevância.'},
+    {time:'Dias 1–3',severity:'critical',title:'Algoritmo suprime o conteúdo',desc:'Vídeo que gerou o viral tem distribuição reduzida. Criador/seller perde prioridade no algoritmo de distribuição.'},
+    {time:'Meta Catalog Ads',severity:'critical',title:'Campanha perde cobertura',desc:'Produtos FDE são removidos do catálogo dinâmico do Meta. Retargeting perde audiência de produto específico.'},
+    {time:'Semanas 2–8',severity:'warn',title:'Recuperação orgânica incerta',desc:'Não há prazo definido. Depende de novo conteúdo viral ou reinvestimento em Spark Ads para reativar distribuição.'},
+    {time:'Variável',severity:'green',title:'Estabilização com novo estoque',desc:'Reabastecimento + novo conteúdo + Spark Ads é a estratégia de recuperação. Sem garantia de recuperar o mesmo pico.'},
+  ]);
+}
+
+/* RECOVERY CHART */
+function buildRecovChart(){
+  const ctx=document.getElementById('recovChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Google Shopping','Mercado Livre','Amazon','Meta Ads','TikTok Shop','AliExpress','Leroy Merlin'],
+      datasets:[
+        {label:'Mínimo (dias)',data:[14,28,14,7,7,7,14],backgroundColor:'#22C55E88',borderRadius:3},
+        {label:'Máximo (dias)',data:[42,70,56,35,56,21,28],backgroundColor:'#EF444488',borderRadius:3},
+      ]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x} dias`}}},
+      scales:{x:{ticks:{color:textColor,font:{size:9}},grid:{color:gridColor},title:{display:true,text:'Dias para recuperar posição de ranking',color:textColor,font:{size:9}}},
+        y:{ticks:{color:textColor,font:{size:9}},grid:{display:false}}}}
+  });
+}
+
+/* ═══════════════════════════════
+   CALCULATOR
+═══════════════════════════════ */
+function calcLoss(){
+  const rev=+document.getElementById('sl-rev').value;
+  const oos=+document.getElementById('sl-oos').value/100;
+  const conv=+document.getElementById('sl-conv').value/100;
+  const ads=+document.getElementById('sl-ads').value;
+  const ticket=+document.getElementById('sl-ticket').value;
+
+  const oosRevLost=rev*oos;
+  const adsWasted=ads*oos*(1+(oos*2));
+  const rankLost=oosRevLost*0.15;
+  const mktLost=oosRevLost*0.20;
+  const total=oosRevLost+adsWasted+rankLost+mktLost;
+  const pct=total/rev*100;
+
+  const targetOos=0.05;
+  const targetLost=rev*targetOos;
+  const saving=total-targetLost-ads*(targetOos*(1+(targetOos*2)));
+
+  document.getElementById('v-rev').textContent=fmtR(rev);
+  document.getElementById('v-oos').textContent=fmtPct(oos*100);
+  document.getElementById('v-conv').textContent=fmtPct(conv*100);
+  document.getElementById('v-ads').textContent=fmtR(ads);
+  document.getElementById('v-ticket').textContent=fmtR(ticket);
+
+  const totalEl=document.getElementById('cr-total');
+  totalEl.textContent=fmtR(Math.round(total));
+  totalEl.className='calc-r-val '+(pct>20?'':'amber');
+
+  document.getElementById('cr-pct').textContent=pct.toFixed(1)+'% da receita potencial perdida';
+  document.getElementById('cr-oos').textContent=fmtR(Math.round(oosRevLost));
+  document.getElementById('cr-ads-lost').textContent=fmtR(Math.round(adsWasted));
+  document.getElementById('cr-rank').textContent=fmtR(Math.round(rankLost));
+  document.getElementById('cr-mkt').textContent=fmtR(Math.round(mktLost));
+  document.getElementById('cr-target').textContent=fmtR(Math.max(0,Math.round(saving)))+' economizados/mês';
+}
+
+['sl-rev','sl-oos','sl-conv','sl-ads','sl-ticket'].forEach(id=>document.getElementById(id).addEventListener('input',calcLoss));
+
+/* ═══════════════════════════════
+   MAC CHANNEL TABLE
+═══════════════════════════════ */
+function buildMacChannels(){
+  const channels=[
+    {name:'Mercado Livre',icon:'🛒',oosImpact:'Termômetro em risco',financialRisk:'Alto',roas:'-73%',recovery:'4–10 sem.',priority:'Crítico',cls:'tr',action:'Manter estoque buffer 45 dias. Alertas automáticos a 30% do mínimo.'},
+    {name:'Google Shopping',icon:'🛍️',oosImpact:'Suspensão imediata do feed',financialRisk:'Alto',roas:'-68%',recovery:'3–6 sem.',priority:'Crítico',cls:'tr',action:'Feed dinâmico com estoque em tempo real. Pausar produto antes de zerar.'},
+    {name:'Leroy Merlin',icon:'🏗️',oosImpact:'Desativação do listing',financialRisk:'Médio-Alto',roas:'-55%',recovery:'2–4 sem.',priority:'Alto',cls:'ta',action:'Obras não toleram atraso. Comunicar parcialmente disponibilidade e lead time.'},
+    {name:'Amazon BR/EUA',icon:'📦',oosImpact:'Perda de Buy Box',financialRisk:'Alto',roas:'-68%',recovery:'3–8 sem.',priority:'Alto',cls:'ta',action:'FBA como buffer logístico. Manter mínimo 60 dias de estoque nos centros da Amazon.'},
+    {name:'Meta Catalog Ads',icon:'📘',oosImpact:'Produto fora do catálogo',financialRisk:'Médio',roas:'-73%',recovery:'2–4 sem.',priority:'Médio',cls:'ta',action:'Criar conjuntos de catálogo alternativos com produtos substitutos para não perder cobertura.'},
+    {name:'TikTok Shop',icon:'🎵',oosImpact:'Remoção do For You',financialRisk:'Muito Alto (se viral)',roas:'-80%',recovery:'Variável',priority:'Crítico (viral)',cls:'tr',action:'Preparar stock spike (2–3x normal) antes de qualquer campanha de criadores.'},
+    {name:'AliExpress',icon:'🌐',oosImpact:'Queda de seller score',financialRisk:'Baixo-Médio',roas:'-40%',recovery:'1–3 sem.',priority:'Médio',cls:'ta',action:'Canal menos crítico. Manter estoque mínimo básico e focar nos canais acima.'},
+    {name:'Nuvemshop (própria)',icon:'☁️',oosImpact:'Abandono de visitante',financialRisk:'Médio',roas:'–',recovery:'Imediato',priority:'Médio',cls:'ta',action:'Ativar "avise-me quando disponível" e lista de espera para não perder o lead.'},
+  ];
+  const tbl=document.getElementById('mac-channel-table');
+  tbl.innerHTML='<thead><tr><th>Canal</th><th>Impacto FDE</th><th>Risco financeiro</th><th>Queda ROAS</th><th>Recuperação</th><th>Prioridade</th></tr></thead>';
+  const tbody=document.createElement('tbody');
+  channels.forEach(c=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div class="mkt-name">${c.icon} ${c.name}</div><div style="font-size:10px;color:var(--text3);margin-top:2px;padding-left:0">${c.action}</div></td>
+      <td><span class="mkt-impact">${c.oosImpact}</span></td>
+      <td><span class="mkt-impact">${c.financialRisk}</span></td>
+      <td style="color:var(--red);font-weight:500;font-family:'DM Mono',monospace">${c.roas}</td>
+      <td class="recovery">${c.recovery}</td>
+      <td><span class="stag ${c.cls}">${c.priority}</span></td>`;
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+}
+
+/* RECOMMENDATIONS */
+function buildRecs(){
+  const recs=[
+    {icon:'📦',title:'Estoque buffer de 90 dias',body:'Lead time de metais premium chega a 120 dias. Manter buffer mínimo de 90 dias para SKUs A (Pareto) e 45 dias para SKUs B. Evita o ciclo de ruptura-reposição que penaliza todos os canais.',priority:'pri-high',plbl:'Urgente'},
+    {icon:'🔔',title:'Alertas automáticos de ruptura',body:'Configurar alertas a 30% do estoque mínimo em todos os canais. Integrar ERP com feeds de Mercado Livre, Amazon e Google Shopping para pausar produtos automaticamente antes de zerar.',priority:'pri-high',plbl:'Urgente'},
+    {icon:'📊',title:'Classificação ABC de SKUs',body:'Aplicar análise ABC/XYZ: produtos A (80% da receita) precisam de cobertura 90+ dias. Produtos C podem operar com estoque menor ou sob demanda. Foco nos 20% de SKUs que geram 80% do resultado.',priority:'pri-high',plbl:'Urgente'},
+    {icon:'🛍️',title:'Feed dinâmico Google Shopping',body:'Sincronizar estoque em tempo real com o Merchant Center via API. Produto com estoque < 5 unidades entra em modo "sob consulta" e é retirado do feed antes de zerar, preservando o Quality Score.',priority:'pri-med',plbl:'30 dias'},
+    {icon:'🎵',title:'Protocolo TikTok Shop',body:'Antes de qualquer campanha com criadores, preparar spike de estoque 3x maior que o normal. Produto viral sem estoque destrói conta e canal. Criar lista de espera integrada ao Shop.',priority:'pri-med',plbl:'30 dias'},
+    {icon:'🏗️',title:'Parceria Leroy Merlin',body:'Comunicar proativamente ao marketplace prazos de entrega e disponibilidade parcial. Obras não toleram cancelamento — prefira lead time longo a FDE. Explorar modelo de dropshipping direto do fornecedor.',priority:'pri-med',plbl:'60 dias'},
+    {icon:'📈',title:'Campanha de produtos substitutos',body:'Criar grupos de catálogo no Meta Ads com produtos similares disponíveis. Quando SKU principal entra em FDE, campanhas migram automaticamente para o substituto, preservando ROAS da conta.',priority:'pri-low',plbl:'60 dias'},
+    {icon:'🤖',title:'Previsão de demanda com IA',body:'Implementar modelo preditivo baseado em sazonalidade de obras, datas de reforma e calendário de eventos (MCMV, financiamentos). Reduz surpresas de demanda em 35–45% segundo McKinsey 2025.',priority:'pri-low',plbl:'90 dias'},
+  ];
+  const cont=document.getElementById('rec-cards');
+  recs.forEach(r=>{
+    const div=document.createElement('div');
+    div.className='rec-card';
+    div.innerHTML=`<div class="rec-card-icon">${r.icon}</div>
+      <div class="rec-card-title">${r.title}</div>
+      <div class="rec-card-body">${r.body}</div>
+      <span class="rec-card-priority ${r.priority}">${r.plbl}</span>`;
+    cont.appendChild(div);
+  });
+}
+
+/* MAC CHART */
+function buildMacChart(){
+  const ctx=document.getElementById('macChart').getContext('2d');
+  const baseRev=80000;
+  const oosPcts=[5,10,15,20,22.7,25,30];
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:oosPcts.map(v=>v+'% FDE'),
+      datasets:[
+        {label:'Receita perdida',data:oosPcts.map(v=>Math.round(baseRev*v/100)),backgroundColor:'#EF4444AA',borderRadius:3,stack:'s'},
+        {label:'Ads desperdiçados',data:oosPcts.map(v=>Math.round(5000*v/100*(1+(v/100*2)))),backgroundColor:'#F59E0BAA',borderRadius:3,stack:'s'},
+        {label:'Perda em marketplaces',data:oosPcts.map(v=>Math.round(baseRev*v/100*0.2)),backgroundColor:'#A855F7AA',borderRadius:3,stack:'s'},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmtR(c.parsed.y)}`}}},
+      scales:{x:{ticks:{color:textColor,font:{size:10}},grid:{display:false},stacked:true},
+        y:{ticks:{color:textColor,font:{size:9},callback:v=>'R$'+v.toLocaleString('pt-BR')},grid:{color:gridColor},stacked:true}}}
+  });
+}
+
+/* ═══════════════════════════════
+   EVENTS & INIT
+═══════════════════════════════ */
+document.querySelectorAll('.cbtn[data-c]').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.cbtn[data-c]').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');activeCtr=b.dataset.c;buildTable();if(activeSector)renderDetail();
+  };
+});
+document.querySelectorAll('.cbtn[data-m]').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.cbtn[data-m]').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');chartMode=b.dataset.m;buildMainChart();
+  };
+});
+document.querySelectorAll('.nav-pill').forEach(pill=>{
+  pill.onclick=e=>{
+    e.preventDefault();
+    document.querySelectorAll('.nav-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    const target=document.querySelector(pill.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+});
+
+// Init
+calcKPIs();
+buildTable();
+buildMainChart();
+buildWT('wt-loucas','loucas');
+buildWT('wt-const','construcao');
+buildRiskCards();
+buildAdsGrid();
+buildRoasChart();
+buildMktTable();
+buildMktChart();
+buildOrgChart();
+buildAllTimelines();
+buildRecovChart();
+buildMacChannels();
+buildRecs();
+buildMacChart();
+calcLoss();
+
+// Pre-select Louças & Metais
+activeSector=SECTORS.find(s=>s.id==='loucas');
+buildTable();renderDetail();
+</script>
+</body>
+</html>
