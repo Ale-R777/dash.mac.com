@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Benchmark Fora de Estoque — MAC Metais Vintage 2025/2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060A0D;
+  --surface:#0D1117;
+  --surface2:#131B22;
+  --surface3:#1A2532;
+  --border:#1E2D3D;
+  --border2:#2A3F55;
+  --border3:#385270;
+  --text:#E2EBF0;
+  --text2:#7A9AB0;
+  --text3:#4A6580;
+  --text4:#2A4560;
+  --brand:#006400;
+  --brand-l:#2D8A2D;
+  --brand-ll:#4CAF50;
+  --brand-bg:rgba(0,100,0,0.08);
+  --brand-border:rgba(0,100,0,0.25);
+  --gold:#C9972A;
+  --gold-l:#E8B84B;
+  --gold-bg:rgba(201,151,42,0.08);
+  --gold-border:rgba(201,151,42,0.25);
+  --amber:#F59E0B;
+  --amber-bg:rgba(245,158,11,0.08);
+  --amber-border:rgba(245,158,11,0.22);
+  --red:#DC3545;
+  --red-bg:rgba(220,53,69,0.08);
+  --red-border:rgba(220,53,69,0.22);
+  --blue:#2E86C1;
+  --blue-bg:rgba(46,134,193,0.08);
+  --blue-border:rgba(46,134,193,0.22);
+  --teal:#17A589;
+  --teal-bg:rgba(23,165,137,0.08);
+  --r:8px;--rl:12px;--rxl:16px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.6;
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,100,0,0.12) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23006400' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* TOPBAR */
+.topbar{
+  background:rgba(6,10,13,0.97);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:200;
+  backdrop-filter:blur(16px);
+}
+.topbar-inner{max-width:1340px;margin:0 auto;display:flex;align-items:center;gap:0}
+.logo-band{
+  background:#fff;
+  padding:8px 24px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-right:1px solid #e0e0e0;
+  flex-shrink:0;
+  min-height:56px;
+}
+.logo-band img{height:36px;width:auto;display:block}
+.nav-area{flex:1;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}
+.nav-pills{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none}
+.nav-pills::-webkit-scrollbar{display:none}
+.nav-pill{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:none;background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .2s;text-decoration:none;display:block}
+.nav-pill:hover{color:var(--text);background:var(--surface2)}
+.nav-pill.active{background:var(--brand);color:#fff}
+.live{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);flex-shrink:0}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--brand-ll);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* PAGE */
+.page{max-width:1340px;margin:0 auto;padding:0 24px 80px}
+section{padding-top:44px}
+
+/* HERO */
+.hero{padding:44px 0 36px;border-bottom:1px solid var(--border);margin-bottom:36px}
+.hero-eyebrow{font-size:11px;font-weight:500;color:var(--brand-ll);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.hero-eyebrow::after{content:'';flex:0 0 40px;height:1px;background:var(--brand-ll);opacity:.4}
+.hero h1{font-size:clamp(22px,3.2vw,34px);font-weight:300;line-height:1.2;color:var(--text);margin-bottom:8px}
+.hero h1 strong{font-weight:700;color:var(--brand-ll)}
+.hero-desc{font-size:13px;color:var(--text2);max-width:760px;line-height:1.8;margin-bottom:22px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:11px;font-weight:500;padding:4px 13px;border-radius:20px;border:1px solid;display:flex;align-items:center;gap:5px}
+.chip::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.chip-green{background:var(--brand-bg);border-color:var(--brand-border);color:var(--brand-ll)}
+.chip-amber{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)}
+.chip-red{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.chip-gold{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold-l)}
+
+/* SEC HEADER */
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.sec-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sec-title{font-size:15px;font-weight:600;color:var(--text)}
+.sec-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.sec-line{flex:1;height:1px;background:var(--border)}
+
+/* KPI */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:32px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s}
+.kpi:hover{border-color:var(--border2)}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
+.kpi.green::after{background:linear-gradient(90deg,var(--brand),transparent)}
+.kpi.gold::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.kpi.red::after{background:linear-gradient(90deg,var(--red),transparent)}
+.kpi.amber::after{background:linear-gradient(90deg,var(--amber),transparent)}
+.kpi.blue::after{background:linear-gradient(90deg,var(--blue),transparent)}
+.kpi-lbl{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.kpi-val{font-size:25px;font-weight:300;color:var(--text);letter-spacing:-.02em;line-height:1}
+.kpi-val sup{font-size:13px;font-weight:400;color:var(--text2);margin-left:1px}
+.kpi-note{font-size:11px;color:var(--text3);margin-top:5px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:20px 22px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px}
+.card-title{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+
+/* COUNTRY BTNS */
+.ctrl-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px;align-items:center}
+.ctrl-label{font-size:11px;color:var(--text3);margin-right:2px}
+.cbtn{font-size:11px;font-weight:500;padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s}
+.cbtn:hover{border-color:var(--text2);color:var(--text)}
+.cbtn.active{background:var(--brand);border-color:var(--brand);color:white}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+
+/* SECTOR TABLE */
+.stbl{width:100%;border-collapse:collapse}
+.stbl th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:500;padding:0 8px 10px 0;border-bottom:1px solid var(--border);text-align:left}
+.stbl th:not(:first-child){text-align:right}
+.stbl td{padding:9px 8px 9px 0;border-bottom:1px solid var(--border);vertical-align:middle}
+.stbl td:not(:first-child){text-align:right}
+.stbl tr:last-child td{border-bottom:none}
+.stbl tr{cursor:pointer;transition:background .15s}
+.stbl tr:hover td{background:rgba(0,100,0,.04)}
+.stbl tr.sel td{background:rgba(0,100,0,.08)}
+.sn{font-size:12px;font-weight:500;color:var(--text)}
+.sv{font-size:12px;font-weight:500;font-family:'DM Mono',monospace}
+.stag{display:inline-block;font-size:9px;font-weight:500;padding:2px 7px;border-radius:3px}
+.tg{background:var(--brand-bg);color:var(--brand-ll)}
+.ta{background:var(--amber-bg);color:var(--amber)}
+.tr-t{background:var(--red-bg);color:var(--red)}
+.sbar-w{width:72px;height:4px;background:var(--surface3);border-radius:2px;display:inline-block;vertical-align:middle}
+.sbar{height:100%;border-radius:2px;transition:width .4s ease}
+
+/* DETAIL */
+.cmp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px}
+.cmp{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);padding:12px 14px}
+.cmp-c{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.cmp-v{font-size:20px;font-weight:300;letter-spacing:-.02em;margin-bottom:3px}
+.cmp-s{font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;display:inline-block}
+.risk-bar{width:100%;height:10px;border-radius:5px;overflow:hidden;display:flex;position:relative;margin-bottom:5px}
+.risk-seg{height:100%}
+.risk-needle{position:absolute;top:-3px;width:2px;height:16px;background:white;border-radius:1px;box-shadow:0 0 8px rgba(255,255,255,.6);transition:left .5s ease}
+.risk-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:14px}
+.insight{background:linear-gradient(135deg,rgba(0,100,0,.07),rgba(0,100,0,.02));border:1px solid var(--brand-border);border-radius:var(--r);padding:13px 16px;font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+.insight strong{color:var(--text);font-weight:500}
+.warning-box{background:rgba(245,158,11,.07);border:1px solid var(--amber-border);border-radius:var(--r);padding:13px 16px;font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+.warning-box strong{color:var(--amber);font-weight:500}
+
+/* CHART */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:22px;margin-bottom:16px}
+.ch-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:11px;color:var(--text2)}
+.ch-legend span{display:flex;align-items:center;gap:5px}
+.ch-legend i{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* RISK INDEX */
+.risk-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-bottom:16px}
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;transition:border-color .2s}
+.rc:hover{border-color:var(--border3)}
+.rc-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.3}
+.rc-verdict{font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5}
+.rc-score-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:7px}
+.rc-score{font-size:28px;font-weight:300;letter-spacing:-.03em;line-height:1}
+.rc-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:3px}
+.rc-bar-track{width:100%;height:5px;background:var(--surface3);border-radius:3px;margin-bottom:8px}
+.rc-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.rc-subs{display:flex;gap:5px;flex-wrap:wrap}
+.rc-sub{font-size:10px;color:var(--text3);background:var(--surface2);padding:2px 6px;border-radius:3px;white-space:nowrap}
+.rc-legend{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);padding:16px 20px;margin-bottom:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.rc-leg-item{display:flex;align-items:flex-start;gap:10px}
+.rc-leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;margin-top:2px}
+.rc-leg-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px}
+.rc-leg-desc{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* ADS */
+.ads-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:16px}
+.ads-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px;transition:border-color .2s}
+.ads-card:hover{border-color:var(--border2)}
+.ads-platform{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ads-logo{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ads-pname{font-size:13px;font-weight:600;color:var(--text)}
+.ads-metric{margin-bottom:8px}
+.ads-m-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.ads-m-val{font-size:15px;font-weight:500}
+.ads-note{font-size:11px;color:var(--text2);line-height:1.65;margin-top:8px;border-top:1px solid var(--border);padding-top:8px}
+
+/* MKT */
+.mkt-table{width:100%;border-collapse:collapse;min-width:560px}
+.mkt-table th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:500;padding:0 10px 10px 0;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.mkt-table td{padding:11px 10px 11px 0;border-bottom:1px solid var(--border);font-size:12px;vertical-align:top}
+.mkt-table tr:last-child td{border-bottom:none}
+.mkt-name{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--text);white-space:nowrap}
+.mkt-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.mkt-impact{font-size:11px;color:var(--text2);line-height:1.6}
+.vis-bar-wrap{display:flex;align-items:center;gap:6px}
+.vis-bar-track{width:70px;height:6px;background:var(--surface3);border-radius:3px;flex-shrink:0}
+.vis-bar-fill{height:100%;border-radius:3px}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:28px;margin-bottom:8px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:var(--border2)}
+.tl-item{position:relative;margin-bottom:18px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{width:16px;height:16px;border-radius:50%;border:2px solid;position:absolute;left:-24px;top:2px;display:flex;align-items:center;justify-content:center}
+.tl-dot-inner{width:6px;height:6px;border-radius:50%}
+.tl-day{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.tl-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.tl-desc{font-size:11px;color:var(--text2);line-height:1.65}
+
+/* CALC */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.calc-grid{grid-template-columns:1fr}}
+.calc-field{margin-bottom:16px}
+.calc-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.calc-label span{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--text);letter-spacing:0}
+input[type=range]{width:100%;height:4px;-webkit-appearance:none;background:var(--surface3);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--brand);cursor:pointer;border:2px solid var(--bg);box-shadow:0 0 0 2px var(--brand);transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.calc-result{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rl);padding:20px}
+.calc-r-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.calc-r-val{font-size:30px;font-weight:300;letter-spacing:-.02em;margin-bottom:4px}
+.calc-r-sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+.calc-r-items{display:flex;flex-direction:column;gap:7px}
+.calc-r-item{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:8px 10px;background:var(--surface3);border-radius:6px}
+.calc-r-item-label{color:var(--text2)}
+.calc-r-item-val{font-family:'DM Mono',monospace;font-weight:500;color:var(--text)}
+
+/* MAC SECTION */
+.mac-hero{background:linear-gradient(135deg,rgba(0,100,0,.1),rgba(201,151,42,.05));border:1px solid rgba(0,100,0,.2);border-radius:var(--rxl);padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
+.mac-hero::after{content:'MAC METAIS VINTAGE';position:absolute;right:-10px;bottom:-16px;font-size:72px;font-weight:700;color:rgba(0,100,0,.04);line-height:1;pointer-events:none;letter-spacing:-.04em;font-family:'Playfair Display',serif}
+.mac-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,100,0,.12);border:1px solid rgba(0,100,0,.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:500;color:var(--brand-ll);margin-bottom:14px}
+.mac-title{font-size:20px;font-weight:300;color:var(--text);margin-bottom:6px;font-family:'Playfair Display',serif}
+.mac-title strong{font-weight:600;color:var(--brand-ll)}
+.mac-desc{font-size:12px;color:var(--text2);line-height:1.8;max-width:700px}
+.mac-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:16px}
+.mac-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px}
+.mac-kpi-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.mac-kpi-val{font-size:21px;font-weight:300;color:var(--text);margin-bottom:2px;letter-spacing:-.01em}
+.mac-kpi-sub{font-size:10px;color:var(--text2)}
+
+/* RECOMMENDATIONS */
+.rec-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px;border-top:2px solid var(--border)}
+.rec-card.pri-urgent{border-top-color:var(--red)}
+.rec-card.pri-30{border-top-color:var(--amber)}
+.rec-card.pri-60{border-top-color:var(--brand)}
+.rec-card.pri-90{border-top-color:var(--blue)}
+.rec-icon{font-size:18px;margin-bottom:10px}
+.rec-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.rec-body{font-size:11px;color:var(--text2);line-height:1.7}
+.rec-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px}
+.pb-red{background:var(--red-bg);color:var(--red)}
+.pb-amber{background:var(--amber-bg);color:var(--amber)}
+.pb-green{background:var(--brand-bg);color:var(--brand-ll)}
+.pb-blue{background:var(--blue-bg);color:var(--blue)}
+
+/* WORLD TABLE */
+.wtbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:20px 22px;overflow-x:auto}
+.wtbl{width:100%;border-collapse:collapse;min-width:380px}
+.wtbl th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:0 10px 10px 0;border-bottom:1px solid var(--border);text-align:left}
+.wtbl td{padding:8px 10px 8px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text)}
+.wtbl tr:last-child td{border-bottom:none}
+.mbar{display:flex;align-items:center;gap:6px}
+.mbar-t{width:56px;height:4px;background:var(--surface3);border-radius:2px;flex-shrink:0}
+.mbar-f{height:100%;border-radius:2px}
+
+/* METHOD */
+.meth-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:24px;margin-bottom:16px}
+.meth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:16px}
+.meth-item{border-left:2px solid var(--brand);padding-left:14px}
+.meth-item strong{font-size:12px;font-weight:500;color:var(--text);display:block;margin-bottom:4px}
+.meth-item p{font-size:11px;color:var(--text2);line-height:1.65}
+.source-list{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.src-tag{font-size:11px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;color:var(--text2)}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:28px 0;margin-top:12px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;font-size:11px;color:var(--text3)}
+.footer-brand{font-weight:600;color:var(--text2);font-size:12px;margin-bottom:4px}
+.footer-author{color:var(--brand-ll);font-weight:500;font-size:12px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+@media(max-width:640px){.page{padding:0 14px 60px}.logo-band img{height:28px}.nav-pills{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo-band">
+      <img src="data:image/webp;base64,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" alt="MAC Metais Vintage"/>
+    </div>
+    <div class="nav-area">
+      <nav class="nav-pills">
+        <a class="nav-pill active" href="#benchmark">Benchmark</a>
+        <a class="nav-pill" href="#risco">Risco Composto</a>
+        <a class="nav-pill" href="#ads">Ads & Conta</a>
+        <a class="nav-pill" href="#marketplaces">Marketplaces</a>
+        <a class="nav-pill" href="#recuperacao">Recuperação</a>
+        <a class="nav-pill" href="#calculadora">Calculadora</a>
+        <a class="nav-pill" href="#mac">MAC Metais Vintage</a>
+        <a class="nav-pill" href="#recomendacoes">Recomendações</a>
+        <a class="nav-pill" href="#metodologia">Fontes</a>
+      </nav>
+      <div class="live"><div class="dot"></div>Base 2025/2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="hero" id="benchmark">
+    <div class="hero-eyebrow">Inteligência Comercial <span style="color:var(--text3);font-weight:400;font-size:10px;letter-spacing:.03em">· PARA MAC METAIS VINTAGE — SAÚDE DO ESTOQUE COM MÉDIA CRÍTICA ACEITÁVEL</span></div>
+    <h1>Ruptura de Estoque no <strong>E-commerce</strong><br/>Benchmark Setorial · Ads · Marketplaces · 2025/2026</h1>
+    <p class="hero-desc">Análise completa de Fora de Estoque (FDE) por setor e mercado, com impacto em campanhas pagas, penalizações algorítmicas por canal, calculadora de perda financeira e plano de ação dedicado ao setor de Louças & Metais Sanitários. Selic atual: 14,75%. Dados: Neogrid, Lett, IHL Group, NRF, Forrester, CBIC · 2025/2026.</p>
+    <div class="hero-chips">
+      <span class="chip chip-green">Saudável: 0 – 5%</span>
+      <span class="chip chip-amber">Atenção: 5 – 15%</span>
+      <span class="chip chip-red">Crítico: &gt; 15%</span>
+      <span class="chip chip-gold">Selic: 14,75% a.a.</span>
+    </div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi green"><div class="kpi-lbl">Média Brasil</div><div class="kpi-val" id="kpi-br">—<sup>%</sup></div><div class="kpi-note">todos os setores</div></div>
+    <div class="kpi blue"><div class="kpi-lbl">Média EUA</div><div class="kpi-val" id="kpi-us">—<sup>%</sup></div><div class="kpi-note">todos os setores</div></div>
+    <div class="kpi blue"><div class="kpi-lbl">Média Global</div><div class="kpi-val" id="kpi-gl">—<sup>%</sup></div><div class="kpi-note">todos os setores</div></div>
+    <div class="kpi red"><div class="kpi-lbl">Críticos BR</div><div class="kpi-val" id="kpi-crit">—<sup>/12</sup></div><div class="kpi-note">acima de 15%</div></div>
+    <div class="kpi green"><div class="kpi-lbl">Melhor setor BR</div><div class="kpi-val" id="kpi-best">—<sup>%</sup></div><div class="kpi-note" id="kpi-best-n">—</div></div>
+    <div class="kpi amber"><div class="kpi-lbl">Gap BR – EUA</div><div class="kpi-val" id="kpi-gap">—<sup>pp</sup></div><div class="kpi-note">desvantagem logística</div></div>
+    <div class="kpi red"><div class="kpi-lbl">Louças & Metais BR</div><div class="kpi-val">22,7<sup>%</sup></div><div class="kpi-note">zona crítica</div></div>
+  </div>
+
+  <div class="ctrl-row">
+    <span class="ctrl-label">Ordenar por país:</span>
+    <button class="cbtn active" data-c="br">🇧🇷 Brasil</button>
+    <button class="cbtn" data-c="us">🇺🇸 EUA</button>
+    <button class="cbtn" data-c="eu">🇪🇺 Europa</button>
+    <button class="cbtn" data-c="cn">🇨🇳 China</button>
+    <button class="cbtn" data-c="in">🇮🇳 Índia</button>
+    <button class="cbtn" data-c="gl">🌐 Global</button>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Ranking FDE — <span id="ctr-label">Brasil</span></div>
+        <div style="font-size:10px;background:var(--surface2);color:var(--text2);padding:3px 9px;border-radius:4px">↓ maior → menor</div>
+      </div>
+      <table class="stbl"><thead><tr><th>Setor</th><th>%</th><th>Barra</th><th>Status</th></tr></thead><tbody id="stbody"></tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Detalhe — setor selecionado</div></div>
+      <div id="detail-panel"><div style="color:var(--text3);font-size:12px;padding:40px 0;text-align:center">Selecione um setor ←</div></div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="card-head">
+      <div class="card-title">Fora de Estoque % por setor e mercado</div>
+      <div style="display:flex;gap:6px">
+        <button class="cbtn active" data-m="br_gl" style="padding:4px 10px;font-size:10px">BR vs Global</button>
+        <button class="cbtn" data-m="all" style="padding:4px 10px;font-size:10px">Todos os países</button>
+      </div>
+    </div>
+    <div style="position:relative;height:300px"><canvas id="mainChart"></canvas></div>
+    <div class="ch-legend" id="main-legend"></div>
+  </div>
+
+  <div class="g2">
+    <div class="wtbl-wrap">
+      <div class="card-head" style="margin-bottom:14px"><div class="card-title">Louças & Metais Sanitários — por país</div></div>
+      <table class="wtbl" id="wt-loucas"></table>
+    </div>
+    <div class="wtbl-wrap">
+      <div class="card-head" style="margin-bottom:14px"><div class="card-title">Construção Civil & Home — por país</div></div>
+      <table class="wtbl" id="wt-const"></table>
+    </div>
+  </div>
+
+  <!-- RISCO COMPOSTO -->
+  <section id="risco">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--gold-bg);border:1px solid var(--gold-border)">📊</div>
+      <div><div class="sec-title">Índice de Risco Composto (IRC)</div><div class="sec-sub">Uma nota única que resume o risco real de cada setor — não só a ruptura, mas todas as consequências</div></div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="rc-legend">
+      <div class="rc-leg-item">
+        <div class="rc-leg-dot" style="background:var(--brand)"></div>
+        <div><div class="rc-leg-title">0 – 29 · Saudável</div><div class="rc-leg-desc">Setor bem gerenciado. Ruptura mínima, pouco impacto em ads e marketplace. Manter o ritmo.</div></div>
+      </div>
+      <div class="rc-leg-item">
+        <div class="rc-leg-dot" style="background:var(--amber)"></div>
+        <div><div class="rc-leg-title">30 – 59 · Atenção</div><div class="rc-leg-desc">Ruptura está custando receita e prejudicando campanhas. Requer revisão de processos nos próximos 30–60 dias.</div></div>
+      </div>
+      <div class="rc-leg-item">
+        <div class="rc-leg-dot" style="background:var(--red)"></div>
+        <div><div class="rc-leg-title">60 – 100 · Crítico</div><div class="rc-leg-desc">Perda de receita relevante, campanhas degradadas, marketplaces penalizando a conta. Ação imediata necessária.</div></div>
+      </div>
+      <div class="rc-leg-item">
+        <div class="rc-leg-dot" style="background:var(--blue)"></div>
+        <div><div class="rc-leg-title">Como é calculado</div><div class="rc-leg-desc">50% peso do FDE Brasil + 25% impacto em anúncios pagos + 25% penalização em marketplaces. Escala 0–100.</div></div>
+      </div>
+    </div>
+
+    <div class="risk-cards" id="risk-cards"></div>
+  </section>
+
+  <!-- ADS -->
+  <section id="ads">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--amber-bg);border:1px solid var(--amber-border)">📢</div>
+      <div><div class="sec-title">Impacto em Google & Meta Ads — Produto e Conta</div><div class="sec-sub">O FDE não afeta só o produto fora de estoque — contamina toda a conta e os produtos que ainda estão disponíveis</div></div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="warning-box" style="margin-bottom:16px">
+      <strong>O efeito cascata que a maioria ignora:</strong> quando um produto vai a zero, os cliques pagos continuam chegando até uma página sem estoque — o algoritmo do Google e do Meta registra rejeição imediata. Isso degrada o <em>Quality Score</em> e o <em>Relevance Score</em> da <strong>conta inteira</strong>, não só do produto. Resultado: os produtos que ainda têm estoque passam a pagar <strong>mais caro por clique</strong> e têm <strong>menor entrega</strong>, mesmo sem nenhuma mudança nas campanhas. O custo real do FDE é invisível nas planilhas de resultado mas está presente em todos os produtos anunciados. Com Selic a 14,75%, carregar estoque custa mais — mas o custo de não tê-lo é ainda maior.
+    </div>
+
+    <div class="ads-grid" id="ads-grid"></div>
+
+    <div class="chart-card" style="margin-top:0">
+      <div class="card-head"><div class="card-title">Queda de ROAS conforme o % de FDE cresce — por canal pago</div></div>
+      <div style="position:relative;height:260px"><canvas id="roasChart"></canvas></div>
+      <div class="ch-legend">
+        <span><i style="background:#2E86C1"></i>Google Shopping</span>
+        <span><i style="background:#EC4899"></i>Meta Catalog Ads</span>
+        <span><i style="background:#F59E0B"></i>Google Search</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKETPLACES -->
+  <section id="marketplaces">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--teal-bg);border:1px solid rgba(23,165,137,.25)">🛒</div>
+      <div><div class="sec-title">Impacto por Marketplace — Visibilidade, Performance e Risco</div><div class="sec-sub">Anúncios sem estoque no ML e outros marketplaces não cancelam vendas — punem o algoritmo que distribui seus produtos</div></div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="insight" style="margin-bottom:16px">
+      <strong>O problema específico do Mercado Livre para este negócio:</strong> diferente do modelo com cancelamento de pedido, o cenário da MAC Metais Vintage é ter muitos <em>anúncios ativos sem estoque</em>. O ML monitora continuamente a taxa de anúncios com estoque zero na conta do seller. Quando essa proporção é alta, o algoritmo interpreta que o seller tem problemas operacionais e reduz automaticamente a exposição de <strong>todos os anúncios da conta</strong> — inclusive os que têm estoque. Isso ocorre sem nenhum aviso, e o vendedor percebe apenas pela queda gradual nas visitas e vendas. Os outros marketplaces têm dinâmica semelhante: produtos inativos "poluem" o histórico algorítmico da conta.
+    </div>
+
+    <div class="card" style="margin-bottom:16px;overflow-x:auto">
+      <table class="mkt-table" id="mkt-table"></table>
+    </div>
+
+    <div class="g2">
+      <div class="chart-card" style="margin-bottom:0">
+        <div class="card-head"><div class="card-title">Impacto na visibilidade por canal (0 = sem impacto, 5 = crítico)</div></div>
+        <div style="position:relative;height:260px"><canvas id="mktChart"></canvas></div>
+      </div>
+      <div class="chart-card" style="margin-bottom:0">
+        <div class="card-head"><div class="card-title">Dependência de ranking orgânico — por setor</div></div>
+        <div style="position:relative;height:260px"><canvas id="orgChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECUPERAÇÃO -->
+  <section id="recuperacao">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--brand-bg);border:1px solid var(--brand-border)">⏱</div>
+      <div><div class="sec-title">Tempo de Recuperação Pós-Ruptura</div><div class="sec-sub">Quanto tempo leva para cada canal normalizar depois do reabastecimento</div></div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Google Shopping — o que acontece e quanto demora</div></div>
+        <div class="timeline" id="tl-google"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Mercado Livre — anúncios sem estoque · cenário MAC Metais</div></div>
+        <div class="timeline" id="tl-ml"></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Amazon BR — perda de Buy Box e posição</div></div>
+        <div class="timeline" id="tl-amazon"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Leroy Merlin, TikTok Shop & AliExpress</div></div>
+        <div class="timeline" id="tl-outros"></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="card-head"><div class="card-title">Janela de recuperação por canal — mínimo e máximo estimados (dias)</div></div>
+      <div style="position:relative;height:220px"><canvas id="recovChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- CALCULADORA -->
+  <section id="calculadora">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red-bg);border:1px solid var(--red-border)">💰</div>
+      <div><div class="sec-title">Calculadora de Impacto Financeiro</div><div class="sec-sub">Dois cenários simultâneos: produtos FDE (direto) + efeito cascata nos produtos com estoque (indireto)</div></div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="insight" style="margin-bottom:16px">
+      <strong>O que esta calculadora mede:</strong> ela separa dois impactos distintos que ocorrem ao mesmo tempo.
+      <strong>Bloco 1 — Impacto direto:</strong> o que a loja deixa de faturar porque o produto estava sem estoque quando o cliente quis comprar. Depende da receita, do % de anúncios FDE e do ticket médio.
+      <strong>Bloco 2 — Impacto indireto (efeito cascata):</strong> o que a loja perde nos produtos que têm estoque, causado pela degradação do Quality Score e do ranking algorítmico. Quanto maior a conversão normal da conta, maior o contraste quando um produto vai a FDE — e maior a penalização. A taxa de conversão afeta diretamente este bloco.
+    </div>
+
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)">Parâmetros do negócio</div>
+          <div class="calc-field"><div class="calc-label">Receita mensal bruta<span id="v-rev">R$ 50.000</span></div><input type="range" id="sl-rev" min="5000" max="500000" step="5000" value="50000"/></div>
+          <div class="calc-field"><div class="calc-label">% de anúncios sem estoque<span id="v-oos">22,7%</span></div><input type="range" id="sl-oos" min="1" max="40" step="0.5" value="22.7"/></div>
+          <div class="calc-field"><div class="calc-label">Ticket médio<span id="v-ticket">R$ 380</span></div><input type="range" id="sl-ticket" min="50" max="3000" step="10" value="380"/></div>
+          <div class="calc-field"><div class="calc-label">Taxa de conversão da conta<span id="v-conv">2,5%</span></div><input type="range" id="sl-conv" min="0.5" max="8" step="0.1" value="2.5"/></div>
+          <div class="calc-field"><div class="calc-label">Investimento mensal em Ads<span id="v-ads">R$ 5.000</span></div><input type="range" id="sl-ads" min="500" max="100000" step="500" value="5000"/></div>
+          <div style="background:var(--surface2);border-radius:var(--r);padding:10px 12px;font-size:11px;color:var(--text2);margin-top:4px">
+            <div style="margin-bottom:4px">Visitas estimadas/mês: <strong id="v-visits" style="color:var(--text)">—</strong></div>
+            <div>Pedidos FDE perdidos/mês: <strong id="v-lost-orders" style="color:var(--red)">—</strong></div>
+          </div>
+        </div>
+
+        <div style="background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--rl);padding:18px 20px">
+          <div style="font-size:11px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(220,53,69,.2)">Bloco 1 — Impacto direto (FDE)</div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:14px;line-height:1.6">Produtos sem estoque: visitantes chegam, não compram. Perda proporcional ao ticket e ao volume de tráfego que chega a produtos indisponíveis.</div>
+          <div style="margin-bottom:8px">
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Receita não faturada</div>
+            <div style="font-size:24px;font-weight:300;color:var(--red);letter-spacing:-.02em" id="cr-oos">—</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px" id="cr-oos-orders">— pedidos perdidos</div>
+          </div>
+          <div style="height:1px;background:rgba(220,53,69,.2);margin:12px 0"></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 8px;background:rgba(220,53,69,.08);border-radius:5px">
+              <span style="color:var(--text2)">Ads direcionados a FDE</span>
+              <span style="font-family:'DM Mono',monospace;font-weight:500;color:var(--text)" id="cr-ads-direct">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 8px;background:rgba(220,53,69,.08);border-radius:5px">
+              <span style="color:var(--text2)">Custo por pedido perdido</span>
+              <span style="font-family:'DM Mono',monospace;font-weight:500;color:var(--text)" id="cr-cost-lost">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--rl);padding:18px 20px">
+          <div style="font-size:11px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(245,158,11,.2)">Bloco 2 — Efeito cascata (produtos em estoque)</div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:14px;line-height:1.6">Produtos com estoque pagam mais caro por clique e recebem menos impressões por causa da degradação de Quality Score causada pelo FDE. Quanto maior sua conversão normal, maior a penalização.</div>
+          <div style="margin-bottom:8px">
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Perda estimada em produtos ativos</div>
+            <div style="font-size:24px;font-weight:300;color:var(--amber);letter-spacing:-.02em" id="cr-cascade">—</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px" id="cr-cascade-pct">—% do investimento em ads desperdiçado</div>
+          </div>
+          <div style="height:1px;background:rgba(245,158,11,.2);margin:12px 0"></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 8px;background:rgba(245,158,11,.08);border-radius:5px">
+              <span style="color:var(--text2)">Degradação de Quality Score</span>
+              <span style="font-family:'DM Mono',monospace;font-weight:500;color:var(--text)" id="cr-qs">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 8px;background:rgba(245,158,11,.08);border-radius:5px">
+              <span style="color:var(--text2)">Queda de ranking / mkt.</span>
+              <span style="font-family:'DM Mono',monospace;font-weight:500;color:var(--text)" id="cr-rank">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 8px;background:rgba(245,158,11,.08);border-radius:5px">
+              <span style="color:var(--text2)">Impacto em conv. dos ativos</span>
+              <span style="font-family:'DM Mono',monospace;font-weight:500;color:var(--text)" id="cr-conv-loss">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rl);padding:16px 18px;grid-column:1/3">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Perda total mensal estimada (Bloco 1 + Bloco 2)</div>
+          <div style="font-size:32px;font-weight:300;letter-spacing:-.02em;margin-bottom:4px" id="cr-total">—</div>
+          <div style="font-size:12px;color:var(--text2)" id="cr-pct">—</div>
+        </div>
+        <div style="background:var(--brand-bg);border:1px solid var(--brand-border);border-radius:var(--rl);padding:16px 18px">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Economia mensal se atingir 5% FDE</div>
+          <div style="font-size:24px;font-weight:300;color:var(--brand-ll);letter-spacing:-.02em;margin-bottom:4px" id="cr-target">—</div>
+          <div style="font-size:11px;color:var(--text2)">retorno de ação imediata</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAC METAIS VINTAGE -->
+  <section id="mac">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--gold-bg);border:1px solid var(--gold-border)">🏆</div>
+      <div><div class="sec-title">Análise Dedicada — MAC Metais Vintage</div><div class="sec-sub">Louças & Metais Sanitários · impacto detalhado por canal · posição no benchmark</div></div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="mac-hero">
+      <div class="mac-badge">🔩 Louças & Metais Sanitários · Construção · E-commerce Brasil</div>
+      <div class="mac-title"><strong>MAC Metais Vintage</strong> — Diagnóstico de Estoque 2025/2026</div>
+      <p class="mac-desc">O setor de Louças & Metais Sanitários opera com <strong>22,7% de FDE no Brasil</strong> — zona crítica consolidada. Lead times de importação de 90–120 dias para metais premium europeus e asiáticos, somados à Selic de 14,75% (que encarece o carregamento de estoque), criam um ciclo estrutural de ruptura. A análise abaixo mapeia o impacto real em cada canal de venda e traz um plano de ação concreto para reverter esse cenário.</p>
+    </div>
+
+    <div class="mac-kpis">
+      <div class="mac-kpi"><div class="mac-kpi-label">FDE Brasil (setor)</div><div class="mac-kpi-val" style="color:var(--red)">22,7%</div><div class="mac-kpi-sub">Zona crítica · benchmark 2025</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">FDE EUA (referência)</div><div class="mac-kpi-val" style="color:var(--amber)">13,9%</div><div class="mac-kpi-sub">Home Depot / Lowe's</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">FDE Europa</div><div class="mac-kpi-val" style="color:var(--amber)">11,9%</div><div class="mac-kpi-sub">Mercado maduro</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">Meta viável BR</div><div class="mac-kpi-val" style="color:var(--brand-ll)">&lt; 8%</div><div class="mac-kpi-sub">Com 90 dias de buffer</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">Lead time importação</div><div class="mac-kpi-val">90–120d</div><div class="mac-kpi-sub">Metais premium Europa/Ásia</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">Selic atual</div><div class="mac-kpi-val" style="color:var(--amber)">14,75%</div><div class="mac-kpi-sub">Encarece estoque em 1,23%/mês</div></div>
+      <div class="mac-kpi"><div class="mac-kpi-label">IRC — Risco Composto</div><div class="mac-kpi-val" style="color:var(--red)">76/100</div><div class="mac-kpi-sub">Crítico · ação imediata</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;overflow-x:auto">
+      <div class="card-head"><div class="card-title">Impacto por canal — MAC Metais Vintage (22,7% FDE) · visibilidade, performance e risco financeiro</div></div>
+      <table class="mkt-table" id="mac-channel-table"></table>
+    </div>
+
+    <div class="chart-card">
+      <div class="card-head">
+        <div class="card-title" id="mac-chart-title">Cenários financeiros: impacto mensal com diferentes níveis de FDE</div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin-bottom:20px;padding:16px;background:var(--surface2);border-radius:var(--rl);border:1px solid var(--border)">
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Receita mensal bruta</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text2);flex-shrink:0">R$</span>
+            <input type="number" id="mac-rev" value="80000" min="1000" max="10000000" step="1000"
+              style="width:100%;background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;font-size:14px;font-weight:500;color:var(--text);font-family:'DM Mono',monospace;outline:none;transition:border-color .2s"
+              onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border2)'"/>
+          </div>
+        </div>
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Investimento em Ads</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text2);flex-shrink:0">R$</span>
+            <input type="number" id="mac-ads" value="5000" min="0" max="500000" step="500"
+              style="width:100%;background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;font-size:14px;font-weight:500;color:var(--text);font-family:'DM Mono',monospace;outline:none;transition:border-color .2s"
+              onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border2)'"/>
+          </div>
+        </div>
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Ticket médio</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:var(--text2);flex-shrink:0">R$</span>
+            <input type="number" id="mac-ticket" value="380" min="10" max="50000" step="10"
+              style="width:100%;background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;font-size:14px;font-weight:500;color:var(--text);font-family:'DM Mono',monospace;outline:none;transition:border-color .2s"
+              onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border2)'"/>
+          </div>
+        </div>
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Taxa de conversão</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="number" id="mac-conv" value="2.5" min="0.1" max="15" step="0.1"
+              style="width:100%;background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;font-size:14px;font-weight:500;color:var(--text);font-family:'DM Mono',monospace;outline:none;transition:border-color .2s"
+              onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border2)'"/>
+            <span style="font-size:12px;color:var(--text2);flex-shrink:0">%</span>
+          </div>
+        </div>
+        <button onclick="updateMacChart()" style="background:var(--brand);border:none;border-radius:var(--r);padding:9px 20px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap;transition:background .2s;flex-shrink:0" onmouseover="this.style.background='var(--brand-l)'" onmouseout="this.style.background='var(--brand)'">Atualizar gráfico</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px" id="mac-kpi-row">
+        <div style="background:var(--surface2);border-radius:var(--r);padding:12px 14px;border:1px solid var(--border)">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">FDE atual do setor BR</div>
+          <div style="font-size:20px;font-weight:300;color:var(--red)">22,7%</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">perda estimada abaixo ↓</div>
+        </div>
+        <div style="background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:12px 14px">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Perda com 22,7% FDE</div>
+          <div style="font-size:20px;font-weight:300;color:var(--red)" id="mac-loss-current">—</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px" id="mac-loss-pct-current">—</div>
+        </div>
+        <div style="background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--r);padding:12px 14px">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Perda com 15% FDE</div>
+          <div style="font-size:20px;font-weight:300;color:var(--amber)" id="mac-loss-15">—</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px" id="mac-loss-pct-15">—</div>
+        </div>
+        <div style="background:var(--brand-bg);border:1px solid var(--brand-border);border-radius:var(--r);padding:12px 14px">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Perda com 5% FDE (meta)</div>
+          <div style="font-size:20px;font-weight:300;color:var(--brand-ll)" id="mac-loss-5">—</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px" id="mac-loss-pct-5">—</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);padding:12px 14px">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Economia potencial</div>
+          <div style="font-size:20px;font-weight:300;color:var(--brand-ll)" id="mac-saving">—</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">de 22,7% → 5%</div>
+        </div>
+      </div>
+
+      <div style="position:relative;height:280px"><canvas id="macChart"></canvas></div>
+      <div class="ch-legend">
+        <span><i style="background:var(--red)"></i>Receita não capturada</span>
+        <span><i style="background:var(--amber)"></i>Ads desperdiçados + efeito cascata</span>
+        <span><i style="background:#2E86C1"></i>Perda de visibilidade em marketplaces</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMENDAÇÕES -->
+  <section id="recomendacoes">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--brand-bg);border:1px solid var(--brand-border)">✅</div>
+      <div><div class="sec-title">Recomendações Operacionais</div><div class="sec-sub">Saúde do estoque · processo de compra · fornecedores · reposição — plano por prioridade</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="rec-cards" id="rec-cards"></div>
+  </section>
+
+  <!-- METODOLOGIA -->
+  <section id="metodologia">
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--surface2);border:1px solid var(--border2)">📚</div>
+      <div><div class="sec-title">Fontes & Metodologia</div><div class="sec-sub">Transparência sobre os dados, benchmarks e critérios utilizados neste relatório</div></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="meth-section">
+      <p style="font-size:13px;color:var(--text2);line-height:1.8"><strong style="color:var(--text)">Definição:</strong> Fora de Estoque (FDE) corresponde ao percentual de SKUs ativos indisponíveis para compra em um intervalo de 30 dias. Valores por país refletem médias ponderadas de plataformas B2C, marketplaces e lojas próprias, coletados de relatórios setoriais publicados entre 2024 e início de 2026. <strong style="color:var(--text)">Limites de referência:</strong> 0–5% saudável (padrão internacional IHL Group), 5–15% atenção (perda mensurável de receita), acima de 15% crítico (impacto em reputação e churn de clientes). <strong style="color:var(--text)">Impactos em Ads:</strong> baseados em estudos publicados pelo Google, Meta Business Insights, WordStream e SEMrush (2024–2025). <strong style="color:var(--text)">Calculadora:</strong> modelo estimativo gerencial — use como referência direcional, não como auditoria contábil.</p>
+      <div class="meth-grid">
+        <div class="meth-item"><strong>Dados de FDE setorial</strong><p>Neogrid (ago–out 2025) · Lett E-Commerce Brasil · IBEVAR · IHL Group · Forrester Research · NRF (National Retail Federation)</p></div>
+        <div class="meth-item"><strong>Setor Construção & Metais</strong><p>CBIC (Câmara Bras. da Ind. da Construção) · ANAMACO · relatórios de mercado Deca/Docol/Roca · Business Research Company 2025</p></div>
+        <div class="meth-item"><strong>Impacto em Anúncios</strong><p>Google Merchant Center Help · Meta Business Suite · WordStream ROAS Benchmarks 2025 · SEMrush State of Search 2025</p></div>
+        <div class="meth-item"><strong>Marketplaces</strong><p>Amazon Seller Central Policy · Mercado Livre Seller Center (métricas de saúde da conta) · Leroy Merlin Marketplace · TikTok Shop guidelines</p></div>
+        <div class="meth-item"><strong>Cenário Econômico BR</strong><p>Selic: 14,75% a.a. (Copom, mai/2025). MCMV: 1,26 mi unidades contratadas até 2025 (Ministério das Cidades). E-commerce BR: R$ 235,5 bi em 2025 (ABIACOM).</p></div>
+        <div class="meth-item"><strong>Nota sobre tarifas EUA</strong><p>As tarifas "tariffaço Trump" foram suspensas por decisão judicial da Suprema Corte dos EUA em 2025. Os dados de FDE para EUA refletem o período anterior à suspensão e o baseline estrutural do mercado americano.</p></div>
+      </div>
+      <div class="source-list">
+        <span class="src-tag">Neogrid 2025</span><span class="src-tag">Lett E-Commerce Brasil</span><span class="src-tag">IHL Group</span><span class="src-tag">Forrester Research</span><span class="src-tag">NRF</span><span class="src-tag">CBIC</span><span class="src-tag">ABIACOM</span><span class="src-tag">IBEVAR</span><span class="src-tag">McKinsey Retail 2025</span><span class="src-tag">Salesforce Commerce Cloud</span><span class="src-tag">Google Merchant Center</span><span class="src-tag">Meta Business Insights</span><span class="src-tag">WordStream 2025</span><span class="src-tag">SEMrush 2025</span><span class="src-tag">Amazon Seller Central</span><span class="src-tag">Mercado Livre Seller Center</span><span class="src-tag">Business Research Company</span><span class="src-tag">Banco Central do Brasil</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <div><div class="footer-brand">StockOut Index · E-commerce Benchmark Global · Base 2025/2026</div><div style="color:var(--text3)">Neogrid · Lett · ABRAS · ABIACOM · IHL Group · NRF · Forrester · CBIC · Selic 14,75%</div></div>
+    <div class="footer-author">Alexandre Romualdo · Analista de E-Commerce · Departamento Operacional MAC METAIS VINTAGE · Março de 2026</div>
+  </div>
+</div>
+
+<script>
+const SECTORS=[
+  {id:'livros',label:'Livros & Mídia',br:3.8,us:1.8,eu:1.7,cn:1.5,in:3.1,gl:2.3,adsImpact:1,mktImpact:1,
+   insight:'Melhor desempenho global 2025. Digitalização de e-books e audiobooks reduziu dependência de estoque físico. Integração de WMS avançado mantém FDE abaixo de 4% no Brasil.'},
+  {id:'alimentos',label:'Alimentos & Bebidas',br:7.4,us:4.8,eu:3.9,cn:5.5,in:9.3,gl:5.9,adsImpact:2,mktImpact:2,
+   insight:'Neogrid (mar/2025): 12,9% no varejo físico BR. Quick commerce reduziu FDE em capitais, mas cold chain no interior segue problemático. Selic 14,75% pressiona estoques de perecíveis de alto valor.'},
+  {id:'eletronicos',label:'Eletrônicos & TI',br:10.9,us:6.8,eu:5.3,cn:3.5,in:11.8,gl:6.5,adsImpact:4,mktImpact:5,
+   insight:'Escassez de GPUs e chips de IA afeta mercado premium em todos os mercados. Brasil mantém alta dependência de importação. EUA normalizou parcialmente após suspensão judicial das tarifas em 2025.'},
+  {id:'farmacia',label:'Farmácia & Saúde',br:10.7,us:6.5,eu:5.7,cn:6.3,in:12.4,gl:7.5,adsImpact:3,mktImpact:3,
+   insight:'Serialização obrigatória (Anvisa) e FDA elevaram complexidade logística. Norte e Centro-Oeste BR com FDE 40% acima da média nacional. Regulação cresce mais rápido que a infraestrutura de distribuição.'},
+  {id:'beleza',label:'Beleza & Cuidados',br:12.4,us:7.9,eu:7.1,cn:5.8,in:13.7,gl:8.5,adsImpact:4,mktImpact:4,
+   insight:'TikTok Shop viraliza SKUs em horas — estoque zera sem aviso. Brasil é 4º maior mercado de beleza global (ABIHPEC 2025) com cadeia de suprimento ainda madurando. Selic encarece estoque preventivo.'},
+  {id:'moda',label:'Moda & Vestuário',br:14.1,us:9.4,eu:8.5,cn:7.5,in:15.2,gl:10.1,adsImpact:4,mktImpact:4,
+   insight:'Grade XS–5XL multiplicou SKUs. Shein e Shopee pressionam varejistas locais com velocidade de abastecimento impossível de replicar sem capital de giro barato — que a Selic a 14,75% impede.'},
+  {id:'esportes',label:'Esportes & Outdoor',br:14.6,us:9.6,eu:8.8,cn:7.2,in:15.5,gl:10.0,adsImpact:3,mktImpact:3,
+   insight:'Ciclo Copa 2026 em preparação: demanda por artigos esportivos cresce. IA preditiva pode reduzir 40% da ruptura (McKinsey 2025). Janela de oportunidade para varejistas que investirem em planejamento agora.'},
+  {id:'brinquedos',label:'Brinquedos & Games',br:19.8,us:13.5,eu:12.3,cn:7.9,in:18.9,gl:13.2,adsImpact:5,mktImpact:5,
+   insight:'EUA normalizou parcialmente após suspensão das tarifas, mas sazonalidade extrema permanece o maior desafio. No Brasil, Ri Happy registrou +90,5% de tráfego no Natal/2025 com ruptura crítica em itens top.'},
+  {id:'casa',label:'Casa & Decoração',br:18.1,us:12.8,eu:11.1,cn:9.0,in:17.3,gl:12.8,adsImpact:3,mktImpact:3,
+   insight:'R$ 49,3 mi/mês no e-commerce BR (ABCOMM 2025). MCMV: 1,26 mi unidades aceleraram demanda estrutural. Lead times asiáticos de 60–90 dias somados à Selic 14,75% criam ciclo de subinvestimento em estoque.'},
+  {id:'autopecas',label:'Auto & Peças',br:24.8,us:17.2,eu:13.9,cn:9.5,in:22.1,gl:16.1,adsImpact:3,mktImpact:4,
+   insight:'Brasil: 100k+ SKUs, carga tributária de importados e Selic alta = pior mercado global. EUA normalizou parte do impacto das tarifas após decisão judicial, mas dependência de México para peças específicas persiste.'},
+  {id:'loucas',label:'Louças & Metais Sanitários',br:22.7,us:13.9,eu:11.9,cn:8.3,in:19.4,gl:14.5,adsImpact:4,mktImpact:4,
+   insight:'Lead times de 90–120 dias para metais premium. Selic 14,75% torna proibitivo manter buffer de 120 dias — custo financeiro de ~1,5% ao mês. Demanda de reforma residencial (MCMV) pressiona estoque além da capacidade.'},
+  {id:'construcao',label:'Construção Civil & Home',br:26.3,us:16.1,eu:13.2,cn:10.1,in:23.2,gl:17.0,adsImpact:3,mktImpact:3,
+   insight:'Maior FDE no Brasil. Selic 14,75% é o principal fator: aumenta custo de manter estoque em 1,23%/mês, desincentivando antecipação. MCMV: 1,26 mi unidades criaram demanda estrutural que a cadeia não absorve.'},
+];
+const CTRS={br:'Brasil',us:'EUA',eu:'Europa',cn:'China',in:'Índia',gl:'Global'};
+const FLAGS={br:'🇧🇷',us:'🇺🇸',eu:'🇪🇺',cn:'🇨🇳',in:'🇮🇳',gl:'🌐'};
+const CLRS={br:'#2D8A2D',us:'#7A9AB0',eu:'#17A589',cn:'#EC4899',in:'#E8B84B',gl:'#4A6580'};
+let activeCtr='br',activeSector=null,chartMode='br_gl';
+let mainCI=null,roasCI=null,mktCI=null,orgCI=null,recovCI=null,macCI=null;
+const GC='rgba(255,255,255,0.04)',TC='rgba(255,255,255,0.3)';
+
+function st(v){
+  if(v<5)return{label:'Saudável',cls:'tg',color:'#4CAF50'};
+  if(v<15)return{label:'Atenção',cls:'ta',color:'#F59E0B'};
+  return{label:'Crítico',cls:'tr-t',color:'#DC3545'};
+}
+function bc(v){if(v<5)return'#4CAF50';if(v<15)return'#F59E0B';return'#DC3545';}
+function fmtR(n){return'R$ '+Math.round(n).toLocaleString('pt-BR');}
+
+function calcKPIs(){
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const brs=SECTORS.map(s=>s.br),uss=SECTORS.map(s=>s.us),gls=SECTORS.map(s=>s.gl);
+  document.getElementById('kpi-br').innerHTML=avg(brs).toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-us').innerHTML=avg(uss).toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-gl').innerHTML=avg(gls).toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-crit').innerHTML=SECTORS.filter(s=>s.br>15).length+'<sup>/12</sup>';
+  const best=SECTORS.reduce((a,b)=>a.br<b.br?a:b);
+  document.getElementById('kpi-best').innerHTML=best.br.toFixed(1)+'<sup>%</sup>';
+  document.getElementById('kpi-best-n').textContent=best.label;
+  document.getElementById('kpi-gap').innerHTML=(avg(brs)-avg(uss)).toFixed(1)+'<sup>pp</sup>';
+}
+
+function buildTable(){
+  const sorted=[...SECTORS].sort((a,b)=>b[activeCtr]-a[activeCtr]);
+  const max=Math.max(...sorted.map(s=>s[activeCtr]));
+  const tb=document.getElementById('stbody');tb.innerHTML='';
+  sorted.forEach(s=>{
+    const v=s[activeCtr],stv=st(v),w=Math.round(v/max*100);
+    const tr=document.createElement('tr');
+    if(activeSector&&activeSector.id===s.id)tr.classList.add('sel');
+    tr.innerHTML=`<td><span class="sn">${s.label}</span></td>
+      <td><span class="sv" style="color:${bc(v)}">${v.toFixed(1)}%</span></td>
+      <td><div class="sbar-w"><div class="sbar" style="width:${w}%;background:${bc(v)}"></div></div></td>
+      <td><span class="stag ${stv.cls}">${stv.label}</span></td>`;
+    tr.onclick=()=>{activeSector=s;buildTable();renderDetail();};
+    tb.appendChild(tr);
+  });
+  document.getElementById('ctr-label').textContent=CTRS[activeCtr];
+}
+
+function renderDetail(){
+  if(!activeSector)return;
+  const s=activeSector;
+  const cmpHtml=Object.entries(CTRS).map(([k,l])=>{
+    const v=s[k],stv=st(v);
+    return`<div class="cmp"><div class="cmp-c">${FLAGS[k]} ${l}</div>
+      <div class="cmp-v" style="color:${bc(v)}">${v.toFixed(1)}<span style="font-size:12px;color:var(--text2)">%</span></div>
+      <span class="cmp-s ${stv.cls}">${stv.label}</span></div>`;
+  }).join('');
+  const needle=Math.min(s.br/30*100,100).toFixed(1);
+  document.getElementById('detail-panel').innerHTML=`
+    <div style="font-size:15px;font-weight:300;color:var(--text);margin-bottom:4px;font-family:'Playfair Display',serif">${s.label}</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:16px">Fora de Estoque por mercado · 2025/2026</div>
+    <div class="cmp-grid">${cmpHtml}</div>
+    <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Posição Brasil na escala de risco</div>
+    <div style="position:relative;margin-bottom:5px">
+      <div class="risk-bar">
+        <div class="risk-seg" style="width:16.67%;background:linear-gradient(90deg,#1a4d1a,#4CAF50)"></div>
+        <div class="risk-seg" style="width:33.33%;background:linear-gradient(90deg,#78350F,#F59E0B)"></div>
+        <div class="risk-seg" style="width:50%;background:linear-gradient(90deg,#6b1010,#DC3545)"></div>
+        <div class="risk-needle" style="left:calc(${needle}% - 1px)"></div>
+      </div>
+    </div>
+    <div class="risk-labels"><span>0%</span><span>5%</span><span>15%</span><span>30%</span></div>
+    <div class="insight"><strong>Análise 2025/2026:</strong> ${s.insight}</div>`;
+}
+
+function buildMainChart(){
+  if(mainCI)mainCI.destroy();
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  const labels=SECTORS.map(s=>s.label.length>13?s.label.slice(0,12)+'…':s.label);
+  let datasets,legHtml;
+  if(chartMode==='br_gl'){
+    datasets=[
+      {label:'Brasil',data:SECTORS.map(s=>s.br),backgroundColor:'#2D8A2DAA',borderRadius:3,barPercentage:.45},
+      {label:'Global',data:SECTORS.map(s=>s.gl),backgroundColor:'#4A658077',borderRadius:3,barPercentage:.45},
+    ];
+    legHtml='<span><i style="background:#2D8A2D"></i>🇧🇷 Brasil</span><span><i style="background:#4A6580"></i>🌐 Global</span>';
+  }else{
+    const ks=Object.keys(CTRS);
+    datasets=ks.map(k=>({label:CTRS[k],data:SECTORS.map(s=>s[k]),backgroundColor:CLRS[k]+'AA',borderRadius:2,barPercentage:.75}));
+    legHtml=ks.map(k=>`<span><i style="background:${CLRS[k]}"></i>${FLAGS[k]} ${CTRS[k]}</span>`).join('');
+  }
+  document.getElementById('main-legend').innerHTML=legHtml;
+  mainCI=new Chart(ctx,{
+    type:'bar',data:{labels,datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`}}},
+      scales:{x:{ticks:{color:TC,font:{size:9},autoSkip:false,maxRotation:38},grid:{display:false}},
+        y:{min:0,max:30,ticks:{color:TC,font:{size:9},callback:v=>v+'%'},grid:{color:GC}}}},
+    plugins:[{id:'z',beforeDraw(chart){
+      const{ctx,chartArea:{left,right,top,bottom},scales:{y}}=chart;
+      const y5=y.getPixelForValue(5),y15=y.getPixelForValue(15);
+      ctx.save();
+      [[y5,bottom,'rgba(0,100,0,0.05)'],[y15,y5,'rgba(245,158,11,0.05)'],[top,y15,'rgba(220,53,69,0.08)']].forEach(([t,b,c])=>{ctx.fillStyle=c;ctx.fillRect(left,t,right-left,b-t);});
+      [{v:5,c:'rgba(245,158,11,0.5)',l:'5%'},{v:15,c:'rgba(220,53,69,0.6)',l:'15%'}].forEach(({v,c,l})=>{
+        const py=y.getPixelForValue(v);
+        ctx.strokeStyle=c;ctx.lineWidth=1;ctx.setLineDash([4,4]);
+        ctx.beginPath();ctx.moveTo(left,py);ctx.lineTo(right,py);ctx.stroke();
+        ctx.setLineDash([]);ctx.fillStyle=c;ctx.font='9px DM Sans,sans-serif';ctx.fillText(l,left+3,py-3);
+      });
+      ctx.restore();
+    }}]
+  });
+}
+
+function buildWT(id,sid){
+  const s=SECTORS.find(x=>x.id===sid);
+  const rows=Object.entries(CTRS).map(([k,l])=>({k,l,v:s[k]})).sort((a,b)=>b.v-a.v);
+  const max=rows[0].v;
+  const tbl=document.getElementById(id);
+  tbl.innerHTML='<thead><tr><th>País</th><th>FDE %</th><th>Escala</th><th>Status</th></tr></thead>';
+  const tb=document.createElement('tbody');
+  rows.forEach(({k,l,v})=>{
+    const stv=st(v),w=Math.round(v/max*100);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><span style="margin-right:6px">${FLAGS[k]}</span>${l}</td>
+      <td style="font-weight:500;font-family:'DM Mono',monospace;color:${bc(v)}">${v.toFixed(1)}%</td>
+      <td><div class="mbar"><div class="mbar-t"><div class="mbar-f" style="width:${w}%;background:${bc(v)}"></div></div></div></td>
+      <td><span class="stag ${stv.cls}">${stv.label}</span></td>`;
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+}
+
+function buildRiskCards(){
+  const cont=document.getElementById('risk-cards');
+  const verdicts={
+    'livros':'Excelente controle. Canal digital reduz risco estruturalmente.',
+    'alimentos':'Cold chain e perecibilidade exigem atenção constante.',
+    'eletronicos':'Alta dependência de chip importado eleva risco.',
+    'farmacia':'Regulação e validade criam complexidade acima da média.',
+    'beleza':'Lançamentos virais tornam previsão de demanda difícil.',
+    'moda':'Grade de tamanhos × coleções = explosão de SKUs.',
+    'esportes':'Sazonalidade de eventos cria picos difíceis de antecipar.',
+    'brinquedos':'60–70% das vendas em 2 meses. Sazonalidade crítica.',
+    'casa':'Lead times longos + itens volumosos = ciclo lento.',
+    'autopecas':'Catálogo imenso + importação = pior combinação possível.',
+    'loucas':'Lead time 90–120d + Selic 14,75% = ciclo estrutural de ruptura.',
+    'construcao':'Maior FDE do benchmark. Selic e MCMV são os principais fatores.',
+  };
+  const scored=SECTORS.map(s=>{
+    const oosScore=Math.min(s.br/30*50,50);
+    const adsScore=s.adsImpact*5;
+    const mktScore=s.mktImpact*5;
+    return{...s,irc:Math.round(oosScore+adsScore+mktScore)};
+  }).sort((a,b)=>b.irc-a.irc);
+  scored.forEach(s=>{
+    const col=s.irc>=60?'var(--red)':s.irc>=30?'var(--amber)':'var(--brand-ll)';
+    const cls=s.irc>=60?'tr-t':s.irc>=30?'ta':'tg';
+    const lbl=s.irc>=60?'Crítico':s.irc>=30?'Atenção':'Saudável';
+    const div=document.createElement('div');
+    div.className='rc';
+    div.innerHTML=`<div class="rc-name">${s.label}</div>
+      <div class="rc-verdict">${verdicts[s.id]||''}</div>
+      <div class="rc-score-row">
+        <div class="rc-score" style="color:${col}">${s.irc}<span style="font-size:14px;color:var(--text2)">/100</span></div>
+        <span class="rc-badge ${cls}">${lbl}</span>
+      </div>
+      <div class="rc-bar-track"><div class="rc-bar-fill" style="width:${s.irc}%;background:${col}"></div></div>
+      <div class="rc-subs">
+        <span class="rc-sub">FDE: ${s.br.toFixed(1)}%</span>
+        <span class="rc-sub">Ads: ${['―','Baixo','Moderado','Alto','Muito alto','Crítico'][s.adsImpact]}</span>
+        <span class="rc-sub">Mkt: ${['―','Baixo','Moderado','Alto','Muito alto','Crítico'][s.mktImpact]}</span>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function buildAdsGrid(){
+  const plats=[
+    {name:'Google Shopping',icon:'🛍️',bg:'#1A73E8',
+     m1:{l:'Queda de ROAS com 22% FDE',v:'-68%',c:'var(--red)'},
+     m2:{l:'Aumento de CPC conta',v:'+34%',c:'var(--amber)'},
+     note:'Produto com FDE = feed suspenso imediatamente. Cliques chegam a página vazia, rejeição sobe, Quality Score da conta cai. Os outros produtos em estoque passam a pagar mais caro por clique e recebem menos impressões — sem nenhuma mudança nas campanhas. Recuperação: 3–6 semanas após reabastecimento.'},
+    {name:'Meta Catalog Ads',icon:'📘',bg:'#1877F2',
+     m1:{l:'Queda de ROAS (FDE)',v:'-73%',c:'var(--red)'},
+     m2:{l:'Aumento de CPM conta',v:'+41%',c:'var(--amber)'},
+     note:'Produtos sem estoque saem do catálogo dinâmico. A campanha perde cobertura e o algoritmo, que otimiza para conversão, para de entregar para o público mais qualificado. O Relevance Score da conta cai, encarecendo todos os anúncios ativos — inclusive de produtos com estoque normal.'},
+    {name:'Google Merchant Center',icon:'🏪',bg:'#34A853',
+     m1:{l:'Exposição com FDE',v:'Zero',c:'var(--red)'},
+     m2:{l:'Reativação manual',v:'1–3 dias',c:'var(--amber)'},
+     note:'Estoque 0 = suspensão automática do produto no Merchant Center. Não se reativa sozinho ao repor estoque — exige ação manual e aprovação. Enquanto isso, concorrentes ocupam o espaço no leilão. Histórico de qualidade do produto é preservado, mas posição de leilão é perdida e precisa ser reconquistada com investimento.'},
+    {name:'Google Search (marca)',icon:'🔍',bg:'#4285F4',
+     m1:{l:'Queda de ROAS',v:'-52%',c:'var(--red)'},
+     m2:{l:'CPC da conta',v:'+18%',c:'var(--amber)'},
+     note:'Anúncios de busca continuam aparecendo mesmo com produto sem estoque. O cliente clica, vê que não tem estoque e volta. Essa rejeição aumenta o bounce rate da conta, que o Google interpreta como sinal de baixa qualidade — elevando o custo de todos os outros anúncios da loja, especialmente os de produtos que têm estoque.'},
+    {name:'Meta Performance Max',icon:'🎯',bg:'#0866FF',
+     m1:{l:'Queda de ROAS',v:'-61%',c:'var(--red)'},
+     m2:{l:'Reaprendizado IA',v:'3–5 sem.',c:'var(--amber)'},
+     note:'P.Max aprende com conversões reais. Com FDE, o modelo de IA para de otimizar para os SKUs sem estoque e contamina o aprendizado geral da campanha. Após reabastecimento, leva 3–5 semanas para o algoritmo reaprender, mesmo com dados históricos — período em que todos os produtos têm performance abaixo do potencial.'},
+    {name:'TikTok Ads',icon:'🎵',bg:'#010101',
+     m1:{l:'Queda de ROAS viral',v:'-80%',c:'var(--red)'},
+     m2:{l:'Risco de conta',v:'Alto',c:'var(--red)'},
+     note:'Canal de maior risco para FDE: produto viral sem estoque colapsa a conta. Rejeição massiva após viral = algoritmo reduz distribuição do conteúdo e marca a conta como problemática. Para metais/louças, risco é menor no dia a dia, mas qualquer conteúdo de reforma viral sem estoque pode gerar dano desproporcional.'},
+  ];
+  const g=document.getElementById('ads-grid');
+  plats.forEach(p=>{
+    const d=document.createElement('div');d.className='ads-card';
+    d.innerHTML=`<div class="ads-platform"><div class="ads-logo" style="background:${p.bg}18;border:1px solid ${p.bg}30">${p.icon}</div><div class="ads-pname">${p.name}</div></div>
+      <div class="ads-metric"><div class="ads-m-lbl">${p.m1.l}</div><div class="ads-m-val" style="color:${p.m1.c}">${p.m1.v}</div></div>
+      <div class="ads-metric"><div class="ads-m-lbl">${p.m2.l}</div><div class="ads-m-val" style="color:${p.m2.c}">${p.m2.v}</div></div>
+      <div class="ads-note">${p.note}</div>`;
+    g.appendChild(d);
+  });
+}
+
+function buildRoasChart(){
+  const ctx=document.getElementById('roasChart').getContext('2d');
+  const x=[0,5,10,15,20,25,30];
+  new Chart(ctx,{type:'line',data:{labels:x.map(v=>v+'%'),datasets:[
+    {label:'Google Shopping',data:[100,74,54,38,28,18,10],borderColor:'#2E86C1',backgroundColor:'rgba(46,134,193,.07)',tension:.4,borderWidth:2,pointRadius:3,fill:true},
+    {label:'Meta Catalog Ads',data:[100,68,46,30,18,10,5],borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.05)',tension:.4,borderWidth:2,pointRadius:3,fill:true},
+    {label:'Google Search',data:[100,82,66,52,40,30,20],borderColor:'#F59E0B',backgroundColor:'rgba(245,158,11,.05)',tension:.4,borderWidth:2,pointRadius:3,fill:true},
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(0)}% do ROAS base`}}},
+    scales:{
+      x:{ticks:{color:TC,font:{size:10}},grid:{color:GC},title:{display:true,text:'% de produtos Fora de Estoque',color:TC,font:{size:10}}},
+      y:{min:0,max:110,ticks:{color:TC,font:{size:10},callback:v=>v+'%'},grid:{color:GC},title:{display:true,text:'ROAS (base = 100%)',color:TC,font:{size:10}}}
+    }}
+  });
+}
+
+function buildMktTable(){
+  const mkts=[
+    {name:'Mercado Livre',icon:'🛒',bg:'#FFE600',
+     vis:4,perf:5,risk:5,recovery:'4–10 semanas',
+     impact:'Muitos anúncios com estoque zero reduzem o "health score" da conta — o ML chama de "taxa de anúncios sem estoque". Quando alta, o algoritmo reduz automaticamente a visibilidade de TODOS os anúncios do seller, mesmo os com estoque. Não há aviso: o vendedor percebe apenas pela queda gradual de visitas.'},
+    {name:'Amazon BR',icon:'📦',bg:'#FF9900',
+     vis:5,perf:4,risk:5,recovery:'3–8 semanas',
+     impact:'Produto FDE perde Buy Box imediatamente. O A9/A10 (algoritmo Amazon) penaliza sellers com histórico de FDE no ranqueamento orgânico de busca — efeito de longo prazo que persiste meses após reabastecimento. Taxa de cancelamento e métricas de saúde do seller ficam registradas permanentemente.'},
+    {name:'Leroy Merlin',icon:'🏗️',bg:'#007832',
+     vis:3,perf:3,risk:4,recovery:'2–4 semanas',
+     impact:'Produto FDE é desativado do marketplace. Reativação não é automática — exige contato com suporte. Para o setor de metais e construção, a penalidade é agravada: projetos de obra não toleram atrasos e o cliente migra para concorrente permanentemente.'},
+    {name:'TikTok Shop',icon:'🎵',bg:'#010101',
+     vis:5,perf:4,risk:5,recovery:'Variável',
+     impact:'Produto viral sem estoque tem distribuição cortada em tempo real. O For You não entrega mais o produto. Para metais/louças, o risco se concentra em conteúdos de reforma que viralizam — uma única rejeição massiva pode suprimir a conta por semanas.'},
+    {name:'AliExpress',icon:'🌐',bg:'#E43226',
+     vis:2,perf:2,risk:3,recovery:'1–3 semanas',
+     impact:'Seller score impactado por anúncios inativos. Produtos FDE recorrentes perdem badge de Envio Rápido. Impacto menor que ML e Amazon, mas acumulativo ao longo do tempo com muitos SKUs inativos.'},
+    {name:'Nuvemshop (loja própria)',icon:'☁️',bg:'#6C5CE7',
+     vis:1,perf:1,risk:2,recovery:'Imediato',
+     impact:'Não há penalização algorítmica interna por FDE. O impacto é indireto: produto indisponível gera abandono e frustração. O Google Shopping integrado sim penaliza. Ativar "avise-me quando disponível" preserva o lead e reduz perda permanente do cliente.'},
+  ];
+  const tbl=document.getElementById('mkt-table');
+  tbl.innerHTML='<thead><tr><th>Canal</th><th>Visibilidade</th><th>Performance</th><th>Risco financeiro</th><th>Recuperação</th><th>Impacto de FDE</th></tr></thead>';
+  const tb=document.createElement('tbody');
+  mkts.forEach(m=>{
+    function vbar(v){const w=v/5*100;const c=v>=4?'var(--red)':v>=3?'var(--amber)':'var(--brand-ll)';return`<div class="vis-bar-wrap"><div class="vis-bar-track"><div class="vis-bar-fill" style="width:${w}%;background:${c}"></div></div><span style="font-size:10px;color:${c};font-weight:500">${['―','Baixo','Baixo','Médio','Alto','Crítico'][v]}</span></div>`;}
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div class="mkt-name"><div class="mkt-icon" style="background:${m.bg}15;border:1px solid ${m.bg}25">${m.icon}</div>${m.name}</div></td>
+      <td>${vbar(m.vis)}</td><td>${vbar(m.perf)}</td><td>${vbar(m.risk)}</td>
+      <td style="font-size:11px;color:var(--text2);white-space:nowrap">${m.recovery}</td>
+      <td><span class="mkt-impact">${m.impact}</span></td>`;
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+}
+
+function buildMktChart(){
+  const ctx=document.getElementById('mktChart').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{
+    labels:['Mercado Livre','Amazon BR','Leroy Merlin','TikTok Shop','AliExpress','Nuvemshop'],
+    datasets:[{label:'Impacto na visibilidade',data:[4,5,3,5,2,1],backgroundColor:['#DC3545AA','#DC3545AA','#F59E0BAA','#DC3545AA','#F59E0BAA','#4CAF50AA'],borderRadius:4}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const l=['―','Baixo','Baixo','Médio','Alto','Crítico'];return` ${l[c.parsed.y]}`;}}}},
+    scales:{x:{ticks:{color:TC,font:{size:10}},grid:{display:false}},y:{min:0,max:5,ticks:{color:TC,font:{size:10},stepSize:1},grid:{color:GC}}}}
+  });
+}
+
+function buildOrgChart(){
+  const ctx=document.getElementById('orgChart').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{
+    labels:SECTORS.map(s=>s.label.length>11?s.label.slice(0,10)+'…':s.label),
+    datasets:[{label:'Dependência de ranking',data:SECTORS.map(s=>s.mktImpact),
+      backgroundColor:SECTORS.map(s=>{const p=s.mktImpact/5;return`rgba(${Math.round(220*p+45*(1-p))},${Math.round(53*p+175*(1-p))},${Math.round(69*p+69*(1-p))},.7)`;}),borderRadius:3}]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const l=['―','Baixa','Baixa','Média','Alta','Crítica'];return` ${l[c.parsed.x]}`;}}}},
+    scales:{x:{min:0,max:5,ticks:{color:TC,font:{size:9},stepSize:1},grid:{color:GC}},y:{ticks:{color:TC,font:{size:9}},grid:{display:false}}}}
+  });
+}
+
+function buildTimeline(id,items){
+  const cont=document.getElementById(id);
+  items.forEach(item=>{
+    const dc=item.s==='crit'?'#DC3545':item.s==='warn'?'#F59E0B':'#4CAF50';
+    const div=document.createElement('div');div.className='tl-item';
+    div.innerHTML=`<div class="tl-dot" style="border-color:${dc};background:${dc}18"><div class="tl-dot-inner" style="background:${dc}"></div></div>
+      <div class="tl-day">${item.t}</div><div class="tl-title">${item.title}</div><div class="tl-desc">${item.desc}</div>`;
+    cont.appendChild(div);
+  });
+}
+
+function buildAllTimelines(){
+  buildTimeline('tl-google',[
+    {t:'Dia 1',s:'crit',title:'Produto suspenso do feed de Shopping',desc:'O Merchant Center detecta estoque 0 e remove o produto automaticamente. Zero impressões, zero cliques no produto.'},
+    {t:'Dias 1–3',s:'crit',title:'Ads continuam rodando — cliques pagos sem conversão',desc:'Campanhas de search e display ainda ativas levam visitantes a uma página sem estoque. Taxa de rejeição dispara para 85%+.'},
+    {t:'Dias 3–7',s:'crit',title:'Quality Score da conta degrada',desc:'Google registra alta taxa de rejeição como landing page de baixa qualidade. CPC dos outros produtos na conta começa a subir 10–20%. Os produtos em estoque pagam pelo FDE do produto vizinho.'},
+    {t:'Reabastecimento',s:'warn',title:'Reativação manual obrigatória',desc:'Não é automático. O seller deve entrar no Merchant Center, reativar o produto e aguardar aprovação (1–3 dias úteis). Produto não volta sozinho.'},
+    {t:'Semanas 1–2',s:'warn',title:'Posição no leilão zerada',desc:'Histórico do produto no leilão é resetado. Começa do fim da fila competindo com produtos estabelecidos.'},
+    {t:'Semanas 3–6',s:'ok',title:'Recuperação parcial (60–80%)',desc:'Com investimento consistente, o produto recupera parte da posição anterior. Recuperação total: 2–3 meses de campanhas ativas.'},
+  ]);
+  buildTimeline('tl-ml',[
+    {t:'Acumulativo',s:'crit',title:'Muitos anúncios com estoque zero — o cenário MAC Metais',desc:'O Mercado Livre monitora a proporção de anúncios inativos (sem estoque) na conta. Quando essa taxa é alta, o algoritmo classifica o seller como "operacionalmente instável".'},
+    {t:'Automático',s:'crit',title:'Redução de visibilidade em TODOS os anúncios',desc:'O ML reduz a entrega orgânica de todos os produtos do seller — inclusive os com estoque. Não há aviso. O vendedor percebe pela queda gradual de visitas e conversões sem causa aparente.'},
+    {t:'Progressivo',s:'crit',title:'Queda no posicionamento de busca interna',desc:'Produtos com bom histórico de vendas mas seller penalizado aparecem menos nas buscas. O algoritmo pondera a saúde geral do vendedor, não só do produto individual.'},
+    {t:'Sem cancelamentos',s:'warn',title:'Diferença deste cenário: não há cancelamento de pedido',desc:'Como os anúncios ficam inativos (não são removidos), o cliente simplesmente não encontra o produto ou o encontra indisponível. O dano é de visibilidade e não de reputação por cancelamento — mas é igualmente prejudicial.'},
+    {t:'Reabastecimento',s:'warn',title:'Reativação dos anúncios',desc:'Ao atualizar o estoque, os anúncios voltam a ficar ativos. Mas a penalização de visibilidade da conta persiste enquanto a proporção de anúncios inativos não cair abaixo de ~10% do catálogo.'},
+    {t:'Semanas 4–10',s:'ok',title:'Normalização gradual',desc:'Com catálogo ativo e saudável por 4–10 semanas, a visibilidade da conta volta ao normal. A velocidade depende do volume de vendas e do histórico anterior do seller.'},
+  ]);
+  buildTimeline('tl-amazon',[
+    {t:'Dia 1',s:'crit',title:'Buy Box perdida imediatamente',desc:'Produto FDE perde a Buy Box. Se há outros sellers, eles assumem. Se não, o produto some dos resultados de busca.'},
+    {t:'Dias 1–14',s:'crit',title:'Penalização no ranking A9/A10',desc:'O algoritmo da Amazon registra o evento de FDE e penaliza o produto no ranqueamento orgânico. Efeito de longo prazo — persiste meses após reabastecimento.'},
+    {t:'Reabastecimento',s:'warn',title:'Buy Box recuperada (se seller único)',desc:'Sem concorrência, Buy Box retorna ao repor estoque. Com concorrentes, exige preço competitivo e FBA ativo para reconquistar.'},
+    {t:'Semanas 2–4',s:'warn',title:'Ranking começa a subir gradualmente',desc:'O algoritmo leva 2–4 semanas para recalibrar após histórico de FDE ser diluído por novas vendas.'},
+    {t:'Semanas 4–8',s:'ok',title:'Posição próxima ao anterior',desc:'Produtos com alto volume histórico recuperam mais rápido. SKUs de nicho (como metais específicos) podem levar meses.'},
+  ]);
+  buildTimeline('tl-outros',[
+    {t:'Leroy Merlin · Dia 1',s:'crit',title:'Produto desativado — reativação manual',desc:'FDE desativa o produto no marketplace. Obras não esperam: o cliente migra para concorrente permanentemente. Reativação exige contato com suporte e pode levar 2–7 dias.'},
+    {t:'TikTok Shop · Hora 1',s:'crit',title:'Conteúdo viral sem estoque = dano imediato',desc:'Se um conteúdo de reforma viraliza e o produto está sem estoque, rejeição massiva corta a distribuição do vídeo e marca a conta. Recuperação é imprevisível.'},
+    {t:'TikTok Shop · Semanas 2–8',s:'warn',title:'Recuperação orgânica incerta',desc:'Requer novo conteúdo viral ou investimento em Spark Ads para reativar distribuição. Sem garantia de recuperar o mesmo alcance.'},
+    {t:'AliExpress · Dias 1–7',s:'warn',title:'Seller score impactado',desc:'Anúncios inativos acumulados reduzem seller score. Perda de badge Envio Rápido afeta CTR. Impacto menor, mas cumulativo.'},
+    {t:'AliExpress · Semanas 1–3',s:'ok',title:'Normalização mais rápida',desc:'Canal com penalização menos severa. Ao reativar os anúncios, recuperação é mais rápida — 1 a 3 semanas.'},
+  ]);
+}
+
+function buildRecovChart(){
+  const ctx=document.getElementById('recovChart').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{
+    labels:['Google Shopping','Mercado Livre','Amazon BR','Meta Ads','TikTok Shop','AliExpress','Leroy Merlin'],
+    datasets:[
+      {label:'Mínimo',data:[14,28,14,10,7,7,14],backgroundColor:'#2D8A2D88',borderRadius:3},
+      {label:'Máximo',data:[42,70,56,35,56,21,28],backgroundColor:'#DC354588',borderRadius:3},
+    ]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x} dias`}}},
+    scales:{x:{ticks:{color:TC,font:{size:9}},grid:{color:GC},title:{display:true,text:'Dias para recuperar posicionamento após reabastecimento',color:TC,font:{size:9}}},
+      y:{ticks:{color:TC,font:{size:9}},grid:{display:false}}}}
+  });
+}
+
+function calcLoss(){
+  const rev    = +document.getElementById('sl-rev').value;
+  const oosPct = +document.getElementById('sl-oos').value / 100;
+  const conv   = +document.getElementById('sl-conv').value / 100;
+  const ads    = +document.getElementById('sl-ads').value;
+  const ticket = +document.getElementById('sl-ticket').value;
+
+  // Derived traffic metrics — ticket and conv directly used here
+  const monthlyOrders  = rev / ticket;
+  const monthlyVisits  = monthlyOrders / conv;
+  const oosVisits      = monthlyVisits * oosPct;
+  const lostOrders     = Math.round(oosVisits * conv);
+
+  // ── BLOCO 1: Impacto direto (produtos FDE) ──────────────────────
+  // Revenue lost = visits landing on OOS pages × conv × ticket
+  const oosRevLost = oosVisits * conv * ticket; // = rev * oosPct
+  // Ads budget burned sending traffic to OOS products
+  const adsOnOos   = ads * oosPct;
+  // Cost of each lost order (ads ÷ lost orders)
+  const costPerLostOrder = lostOrders > 0 ? adsOnOos / lostOrders : 0;
+
+  // ── BLOCO 2: Efeito cascata (produtos em estoque) ────────────────
+  // conv factor: higher conversion = bigger Quality Score contrast = bigger penalty
+  // A 5% conv account suffers 2x more than a 1% conv account when OOS happens
+  const convFactor = conv / 0.025; // normalized to 2.5% baseline
+  // QS degradation: affects remaining ad budget (budget on products WITH stock)
+  const activeAdsBudget = ads * (1 - oosPct);
+  const qsDegradation   = activeAdsBudget * oosPct * convFactor * 0.18;
+  // Rank/marketplace drop: ticket-weighted (expensive items = higher positional loss)
+  const ticketFactor = Math.sqrt(ticket / 380); // sqrt dampens extremes
+  const rankLost     = oosRevLost * 0.15 * ticketFactor;
+  // Conversion loss on active products due to higher CPC eating into impressions
+  const convLossActive = activeAdsBudget * oosPct * convFactor * 0.10;
+  const cascadeTotal = qsDegradation + rankLost + convLossActive;
+
+  // ── TOTALS ───────────────────────────────────────────────────────
+  const directTotal  = oosRevLost + adsOnOos;
+  const total        = directTotal + cascadeTotal;
+  const pct          = total / rev * 100;
+  const cascadePct   = ads > 0 ? ((qsDegradation + convLossActive) / ads * 100) : 0;
+
+  // ── TARGET at 5% OOS ─────────────────────────────────────────────
+  const t_oos    = 0.05;
+  const t_vis    = monthlyVisits * t_oos;
+  const t_rev    = t_vis * conv * ticket;
+  const t_ads    = ads * t_oos;
+  const t_cf     = convFactor;
+  const t_active = ads * 0.95;
+  const t_qs     = t_active * t_oos * t_cf * 0.18;
+  const t_rank   = t_rev * 0.15 * ticketFactor;
+  const t_convl  = t_active * t_oos * t_cf * 0.10;
+  const targetTotal = t_rev + t_ads + t_qs + t_rank + t_convl;
+  const saving   = Math.max(0, total - targetTotal);
+
+  // ── UPDATE LABELS ─────────────────────────────────────────────────
+  document.getElementById('v-rev').textContent    = fmtR(rev);
+  document.getElementById('v-oos').textContent    = (oosPct*100).toFixed(1)+'%';
+  document.getElementById('v-conv').textContent   = (conv*100).toFixed(1)+'%';
+  document.getElementById('v-ads').textContent    = fmtR(ads);
+  document.getElementById('v-ticket').textContent = fmtR(ticket);
+
+  // Derived display
+  document.getElementById('v-visits').textContent      = Math.round(monthlyVisits).toLocaleString('pt-BR');
+  document.getElementById('v-lost-orders').textContent = lostOrders.toLocaleString('pt-BR')+' pedidos';
+
+  // Bloco 1
+  document.getElementById('cr-oos').textContent         = fmtR(oosRevLost);
+  document.getElementById('cr-oos-orders').textContent  = lostOrders+' pedidos não realizados';
+  document.getElementById('cr-ads-direct').textContent  = fmtR(adsOnOos);
+  document.getElementById('cr-cost-lost').textContent   = lostOrders > 0 ? fmtR(costPerLostOrder) : '—';
+
+  // Bloco 2
+  document.getElementById('cr-cascade').textContent     = fmtR(cascadeTotal);
+  document.getElementById('cr-cascade-pct').textContent = cascadePct.toFixed(1)+'% do budget em ads afetado';
+  document.getElementById('cr-qs').textContent          = fmtR(qsDegradation);
+  document.getElementById('cr-rank').textContent        = fmtR(rankLost);
+  document.getElementById('cr-conv-loss').textContent   = fmtR(convLossActive);
+
+  // Total
+  const te = document.getElementById('cr-total');
+  te.textContent  = fmtR(total);
+  te.style.color  = pct > 25 ? 'var(--red)' : pct > 12 ? 'var(--amber)' : 'var(--brand-ll)';
+  document.getElementById('cr-pct').textContent = pct.toFixed(1)+'% da receita potencial perdida por mês — direto + cascata';
+  document.getElementById('cr-target').textContent = fmtR(saving)+'/mês';
+}
+['sl-rev','sl-oos','sl-conv','sl-ads','sl-ticket'].forEach(id=>document.getElementById(id).addEventListener('input',calcLoss));
+
+function buildMacChannels(){
+  const channels=[
+    {name:'Mercado Livre',icon:'🛒',vis:'Crítica',visCls:'tr-t',perf:'Crítica',perfCls:'tr-t',risk:'Muito Alto',riskCls:'tr-t',recovery:'4–10 sem.',
+     action:'Reduzir % de anúncios inativos é a ação mais urgente. Meta: menos de 10% do catálogo sem estoque para normalizar saúde da conta. Buffer mínimo: 45 dias para SKUs A.'},
+    {name:'Google Shopping',icon:'🛍️',vis:'Crítica',visCls:'tr-t',perf:'Crítica',perfCls:'tr-t',risk:'Alto',riskCls:'tr-t',recovery:'3–6 sem.',
+     action:'Feed dinâmico com estoque em tempo real. Pausar produto a 3 unidades restantes evita a penalização. Recuperar posição exige reinvestimento em Ads após reabastecimento.'},
+    {name:'Leroy Merlin',icon:'🏗️',vis:'Alta',visCls:'ta',perf:'Alta',perfCls:'ta',risk:'Alto',riskCls:'tr-t',recovery:'2–4 sem.',
+     action:'Comunicar lead time ao marketplace antes de zerar. Cliente de obra não aceita surpresa — preferível informar prazo do que deixar produto indisponível sem comunicação.'},
+    {name:'Amazon BR',icon:'📦',vis:'Crítica',visCls:'tr-t',perf:'Alta',perfCls:'ta',risk:'Alto',riskCls:'tr-t',recovery:'3–8 sem.',
+     action:'FBA como buffer. Manter 60 dias de estoque nos centros Amazon protege Buy Box e histórico de seller score — métricas permanentes na plataforma.'},
+    {name:'Meta Ads',icon:'📘',vis:'Alta',visCls:'ta',perf:'Alta',perfCls:'ta',risk:'Médio',riskCls:'ta',recovery:'2–4 sem.',
+     action:'Criar conjuntos de catálogo alternativos com produtos substitutos. Quando SKU vai a FDE, campanha migra automaticamente — preserva ROAS da conta e continuidade das campanhas.'},
+    {name:'TikTok Shop',icon:'🎵',vis:'Alta',visCls:'ta',perf:'Média',perfCls:'ta',risk:'Variável (alto se viral)',riskCls:'ta',recovery:'Variável',
+     action:'Antes de qualquer campanha com criadores: preparar spike de estoque 3x maior que o normal. Produto viral sem estoque = dano desproporcional ao canal e à conta.'},
+    {name:'AliExpress',icon:'🌐',vis:'Média',visCls:'ta',perf:'Baixa',perfCls:'tg',risk:'Baixo-Médio',riskCls:'tg',recovery:'1–3 sem.',
+     action:'Canal menos prioritário. Manter estoque mínimo básico. Foco nos canais de maior impacto listados acima.'},
+    {name:'Nuvemshop',icon:'☁️',vis:'Baixa',visCls:'tg',perf:'Baixa',perfCls:'tg',risk:'Médio (Google Shopping)',riskCls:'ta',recovery:'Imediato',
+     action:'Ativar "avise-me quando disponível" para capturar lead antes de perder o cliente. O risco real é no Google Shopping integrado, não na loja em si.'},
+  ];
+  const tbl=document.getElementById('mac-channel-table');
+  tbl.innerHTML='<thead><tr><th>Canal</th><th>Visibilidade</th><th>Performance</th><th>Risco financeiro</th><th>Recuperação</th><th>Ação recomendada</th></tr></thead>';
+  const tb=document.createElement('tbody');
+  channels.forEach(c=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div class="mkt-name">${c.icon} ${c.name}</div></td>
+      <td><span class="stag ${c.visCls}">${c.vis}</span></td>
+      <td><span class="stag ${c.perfCls}">${c.perf}</span></td>
+      <td><span class="stag ${c.riskCls}">${c.risk}</span></td>
+      <td style="font-size:11px;color:var(--text2);white-space:nowrap">${c.recovery}</td>
+      <td><span class="mkt-impact">${c.action}</span></td>`;
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+}
+
+function buildRecs(){
+  const recs=[
+    {icon:'📦',title:'Reduzir anúncios inativos no Mercado Livre',body:'Mapear todos os anúncios sem estoque e desativar os que não têm previsão de reposição em 30 dias. Meta: taxa de inativos abaixo de 10% do catálogo. Isso normaliza a visibilidade de todos os anúncios da conta sem nenhum outro ajuste.',recovery:'Visibilidade normalizada em 4–6 semanas'},
+    {icon:'🔔',title:'Alertas automáticos de estoque crítico',body:'Configurar alertas a 30% do estoque mínimo em todos os canais. No Google Shopping, pausar produto automaticamente ao atingir 3 unidades — evita penalização de Quality Score e preserva o posicionamento dos demais produtos da conta.',recovery:'Prevenção imediata de novas rupturas'},
+    {icon:'📊',title:'Classificação ABC do catálogo',body:'Identificar os 20% de SKUs que geram 80% da receita (Produtos A). Buffer mínimo de 90 dias para esses. Produtos B: 45 dias. Produtos C podem operar com estoque mínimo ou sob encomenda. Com Selic a 14,75%, concentrar capital de giro nos SKUs certos é decisivo.',recovery:'Redução de FDE em 30–40% em 60 dias'},
+    {icon:'🤝',title:'Renegociar condições com fornecedores',body:'Com lead time de 90–120 dias para metais importados, a relação com fornecedor precisa ser estratégica. Buscar: consignação parcial para SKUs A — pagamento apenas após venda; previsão de demanda compartilhada — fornecedor reserva lote com antecedência; pedido mínimo menor em troca de frequência maior.',recovery:'Redução de lead time efetivo em 2–3 meses'},
+    {icon:'📅',title:'Calendário de reposição baseado em sazonalidade',body:'Reformas têm pico em janeiro–fevereiro e agosto–setembro. Fazer pedidos para esses períodos com 120 dias de antecedência. Cruzar com lançamentos do MCMV e calendário de crédito habitacional para antecipar demanda estrutural antes que ela apareça nos pedidos.',recovery:'Eliminação de rupturas sazonais no 2º ciclo'},
+    {icon:'🛍️',title:'Feed dinâmico Google Shopping em tempo real',body:'Sincronizar estoque via API com o Merchant Center. Produto com menos de 5 unidades entra em modo pausado automaticamente — sem penalização, sem clique perdido. Ao repor estoque, reativa sozinho. Elimina o ciclo de degradação de Quality Score que encarece todos os outros anúncios da conta.',recovery:'Quality Score estabilizado em 3–4 semanas'},
+    {icon:'🏗️',title:'Protocolo Leroy Merlin — comunicação de prazo',body:'Quando um produto tem prazo de reposição confirmado, atualizar o anúncio com a previsão ("Disponível em X dias"). Cliente de obra prefere prazo certo a cancelamento surpresa — isso reduz churn e melhora a avaliação do seller, preservando o posicionamento no marketplace.',recovery:'Melhora de avaliação do seller em 30–45 dias'},
+    {icon:'📈',title:'Catálogos alternativos no Meta Ads',body:'Criar conjuntos de produtos substitutos no Meta Catalog. Quando um SKU vai a FDE, a campanha migra automaticamente para o produto similar ou complementar disponível. Preserva o ROAS da conta e mantém o algoritmo em aprendizado contínuo durante períodos de ruptura.',recovery:'ROAS da conta estabilizado em 2–3 semanas'},
+    {icon:'🤖',title:'Previsão de demanda com histórico de vendas',body:'Cruzar histórico de vendas dos últimos 12 meses com sazonalidade de obras, datas comemorativas e lançamentos de financiamento. Mesmo sem ferramenta de IA, uma previsão estruturada em planilha reduz rupturas em 30–40%. Dados disponíveis: Mercado Livre Analytics, Google Analytics 4 e Merchant Center.',recovery:'Redução estrutural de FDE em 90 dias'},
+    {icon:'💰',title:'Comparar custo de estoque vs. custo do FDE',body:'Com Selic a 14,75%, o custo de carregamento de estoque é ~1,23%/mês. Para a maioria dos SKUs A, esse custo é menor do que a perda gerada pelo FDE. Construir uma planilha que compare o custo financeiro de manter 90 dias de estoque contra a perda estimada pela calculadora — esse número justifica o investimento em capital de giro.',recovery:'Decisão de compra mais assertiva a cada ciclo'},
+  ];
+  const cont=document.getElementById('rec-cards');
+  recs.forEach(r=>{
+    const d=document.createElement('div');
+    d.className='rec-card';
+    d.style.cssText='background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px;display:flex;flex-direction:column;gap:8px';
+    d.innerHTML=`
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:18px;flex-shrink:0;margin-top:1px">${r.icon}</span>
+        <div class="rec-title" style="font-size:12px;font-weight:600;color:var(--text);line-height:1.4">${r.title}</div>
+      </div>
+      <div class="rec-body" style="font-size:11px;color:var(--text2);line-height:1.7;flex:1">${r.body}</div>
+      <div style="display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid var(--border);margin-top:auto">
+        <span style="font-size:12px">⏱</span>
+        <span style="font-size:11px;color:var(--brand-ll);font-weight:500">${r.recovery}</span>
+      </div>`;
+    cont.appendChild(d);
+  });
+}
+
+function calcMacLoss(rev, ads, ticket, conv, oosPct) {
+  const oc = oosPct / 100;
+  const cv = conv / 100;
+  const visits = (rev / ticket) / cv;
+  const oosRevLost = visits * oc * cv * ticket; // = rev * oc
+  const adsOnOos = ads * oc;
+  const convFactor = cv / 0.025;
+  const ticketFactor = Math.sqrt(ticket / 380);
+  const activeAdsBudget = ads * (1 - oc);
+  const qsDeg = activeAdsBudget * oc * convFactor * 0.18;
+  const rankLost = oosRevLost * 0.15 * ticketFactor;
+  const convLoss = activeAdsBudget * oc * convFactor * 0.10;
+  const mktLost = oosRevLost * 0.18;
+  return {
+    revenue: Math.round(oosRevLost),
+    adsCascade: Math.round(adsOnOos + qsDeg + convLoss),
+    mkt: Math.round(mktLost),
+    total: Math.round(oosRevLost + adsOnOos + qsDeg + convLoss + mktLost)
+  };
+}
+
+function updateMacChart() {
+  const rev    = Math.max(1000, +document.getElementById('mac-rev').value || 80000);
+  const ads    = Math.max(0,    +document.getElementById('mac-ads').value || 5000);
+  const ticket = Math.max(10,   +document.getElementById('mac-ticket').value || 380);
+  const conv   = Math.max(0.1,  +document.getElementById('mac-conv').value || 2.5);
+
+  document.getElementById('mac-chart-title').textContent =
+    'Cenários financeiros: impacto mensal com diferentes níveis de FDE (base: ' + fmtR(rev) + '/mês)';
+
+  const x = [5, 10, 15, 20, 22.7, 25, 30];
+
+  // Update KPI cards
+  function kpiSet(pct, elLoss, elPct) {
+    const r = calcMacLoss(rev, ads, ticket, conv, pct);
+    document.getElementById(elLoss).textContent = fmtR(r.total);
+    document.getElementById(elPct).textContent = (r.total / rev * 100).toFixed(1) + '% da receita';
+    return r;
+  }
+  const r227 = kpiSet(22.7, 'mac-loss-current', 'mac-loss-pct-current');
+  const r15  = kpiSet(15,   'mac-loss-15',      'mac-loss-pct-15');
+  const r5   = kpiSet(5,    'mac-loss-5',        'mac-loss-pct-5');
+  document.getElementById('mac-saving').textContent = fmtR(r227.total - r5.total);
+
+  const revData     = x.map(p => calcMacLoss(rev, ads, ticket, conv, p).revenue);
+  const adsData     = x.map(p => calcMacLoss(rev, ads, ticket, conv, p).adsCascade);
+  const mktData     = x.map(p => calcMacLoss(rev, ads, ticket, conv, p).mkt);
+
+  if (macCI) {
+    macCI.data.datasets[0].data = revData;
+    macCI.data.datasets[1].data = adsData;
+    macCI.data.datasets[2].data = mktData;
+    macCI.update();
+  } else {
+    buildMacChart(rev, ads, ticket, conv);
+  }
+}
+
+function buildMacChart(rev=80000, ads=5000, ticket=380, conv=2.5) {
+  const ctx = document.getElementById('macChart').getContext('2d');
+  if (macCI) macCI.destroy();
+  const x = [5, 10, 15, 20, 22.7, 25, 30];
+  macCI = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: x.map(v => v + '% FDE'),
+      datasets: [
+        {label:'Receita não capturada', data:x.map(p=>calcMacLoss(rev,ads,ticket,conv,p).revenue), backgroundColor:'#DC3545AA', borderRadius:3, stack:'s'},
+        {label:'Ads + cascata',          data:x.map(p=>calcMacLoss(rev,ads,ticket,conv,p).adsCascade), backgroundColor:'#F59E0BAA', borderRadius:3, stack:'s'},
+        {label:'Visibilidade mkt.',      data:x.map(p=>calcMacLoss(rev,ads,ticket,conv,p).mkt), backgroundColor:'#2E86C1AA', borderRadius:3, stack:'s'},
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {callbacks: {label: c => ` ${c.dataset.label}: ${fmtR(c.parsed.y)}`}}
+      },
+      scales: {
+        x: {ticks:{color:TC,font:{size:10}}, grid:{display:false}, stacked:true},
+        y: {ticks:{color:TC,font:{size:9},callback:v=>'R$'+v.toLocaleString('pt-BR')}, grid:{color:GC}, stacked:true}
+      }
+    }
+  });
+
+  // Init KPI cards too
+  function kpiSet(pct, elLoss, elPct) {
+    const r = calcMacLoss(rev, ads, ticket, conv, pct);
+    document.getElementById(elLoss).textContent = fmtR(r.total);
+    document.getElementById(elPct).textContent = (r.total / rev * 100).toFixed(1) + '% da receita';
+    return r;
+  }
+  const r227 = kpiSet(22.7, 'mac-loss-current', 'mac-loss-pct-current');
+  const r5   = kpiSet(5,    'mac-loss-5',        'mac-loss-pct-5');
+  kpiSet(15, 'mac-loss-15', 'mac-loss-pct-15');
+  document.getElementById('mac-saving').textContent = fmtR(r227.total - r5.total);
+}
+
+// Live update on Enter or input change
+['mac-rev','mac-ads','mac-ticket','mac-conv'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') updateMacChart(); });
+    el.addEventListener('change', updateMacChart);
+  }
+});
+
+// EVENTS
+document.querySelectorAll('.cbtn[data-c]').forEach(b=>{
+  b.onclick=()=>{document.querySelectorAll('.cbtn[data-c]').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeCtr=b.dataset.c;buildTable();if(activeSector)renderDetail();};
+});
+document.querySelectorAll('.cbtn[data-m]').forEach(b=>{
+  b.onclick=()=>{document.querySelectorAll('.cbtn[data-m]').forEach(x=>x.classList.remove('active'));b.classList.add('active');chartMode=b.dataset.m;buildMainChart();};
+});
+document.querySelectorAll('.nav-pill').forEach(pill=>{
+  pill.onclick=e=>{
+    e.preventDefault();
+    document.querySelectorAll('.nav-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    const t=document.querySelector(pill.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+});
+
+calcKPIs();buildTable();buildMainChart();
+buildWT('wt-loucas','loucas');buildWT('wt-const','construcao');
+buildRiskCards();buildAdsGrid();buildRoasChart();
+buildMktTable();buildMktChart();buildOrgChart();
+buildAllTimelines();buildRecovChart();
+buildMacChannels();buildRecs();buildMacChart();calcLoss();
+activeSector=SECTORS.find(s=>s.id==='loucas');buildTable();renderDetail();
+</script>
+</body>
+</html>
